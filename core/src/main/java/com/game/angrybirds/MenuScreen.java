@@ -75,7 +75,7 @@ public class MenuScreen extends InputAdapter implements Screen  {
         }
         if (level2BtnBounds.contains(touchPoint.x, touchPoint.y)) {
             // transition to Level 2 Screen
-            game.setScreen(new Level2Screen(game));
+            game.setScreen(new Level2_Screen(game));
         }
         return true;
     }
