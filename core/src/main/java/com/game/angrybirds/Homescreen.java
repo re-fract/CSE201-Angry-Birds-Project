@@ -12,24 +12,17 @@ public class Homescreen extends InputAdapter implements Screen  {
     private Texture background;
     private Texture playBtn;
     private Texture exitBtn;
-
-    // Rectangle bounds for detecting button clicks
     private Rectangle playBtnBounds;
     private Rectangle exitBtnBounds;
     private Vector3 touchPoint;
-
     public Homescreen(Main game){
         this.game = game;
         background = new Texture("menu.png");
         playBtn = new Texture("playnew.png");
         exitBtn = new Texture("quit.png");
-
-        // Set bounds for play and exit buttons
         playBtnBounds = new Rectangle(470, 150, 400, 400);
         exitBtnBounds = new Rectangle(10, 10, 100, 100);
-
         touchPoint = new Vector3();
-
     }
     public boolean touchDown(int screenX, int screenY,int pointer, int button) {
         // Convert screen coordinates to game world coordinates
@@ -46,48 +39,35 @@ public class Homescreen extends InputAdapter implements Screen  {
         if (exitBtnBounds.contains(touchPoint.x, touchPoint.y)) {
             Gdx.app.exit();  // Exit the game
         }
-
         return true;
     }
     @Override
     public void show(){
         Gdx.input.setInputProcessor(this);//by calling this in the show you can telling libgdx that this homescreen can take input
     }
-
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0.1f,0.1f,0.3f,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
         float xOffset = (1560-1280)/2f;
-
         game.getBatch().begin();
         game.getBatch().draw(background, -xOffset, 0, 1560, 720);
         game.getBatch().draw(playBtn, playBtnBounds.x, playBtnBounds.y, playBtnBounds.width, playBtnBounds.height);
         game.getBatch().draw(exitBtn, exitBtnBounds.x, exitBtnBounds.y, exitBtnBounds.width, exitBtnBounds.height);
         game.getBatch().end();
     }
-
     @Override
     public void resize(int width, int height) {
-
     }
-
     @Override
     public void pause() {
-
     }
-
     @Override
     public void resume() {
-
     }
-
     @Override
     public void hide() {
-
     }
-
     @Override
     public void dispose() {
         background.dispose();
