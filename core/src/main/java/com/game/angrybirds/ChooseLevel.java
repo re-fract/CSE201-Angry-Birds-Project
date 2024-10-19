@@ -6,53 +6,57 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 
-
-public class Homescreen implements Screen, InputProcessor {
+public class ChooseLevel implements Screen, InputProcessor {
     private final Main game;
     private Texture background;
-    private Texture playBtn;
-    private Texture exitBtn;
-    private Rectangle playBtnBounds;
-    private Rectangle exitBtnBounds;
+    private Texture level1Btn;
+    private Texture level2Btn;
+    private Texture num1;
+    private Texture num2;
+    private Rectangle level1BtnBounds;
+    private Rectangle level2BtnBounds;
     private Vector3 touchPos;
 
-    public Homescreen(Main game) {
+
+    public ChooseLevel(Main game) {
         this.game = game;
         background = new Texture("home.png");
-        playBtn = new Texture("play.png");
-        exitBtn = new Texture("exit.png");
-
-        playBtnBounds = new Rectangle(540, 350, 250, 125);
-        exitBtnBounds = new Rectangle(540, 250, 250, 125);
+        level1Btn = new Texture("level1Btn.png");
+        level2Btn = new Texture("level2Btn.png");
+        num1 = new Texture("one.png");
+        num2 = new Texture("two.png");
+        level1BtnBounds = new Rectangle(227,135,350,450);
+        level2BtnBounds = new Rectangle(757,135,350,450);
         touchPos = new Vector3();
 
         Gdx.input.setInputProcessor(this);
     }
 
     @Override
-    public void show(){
+    public void show() {
 
     }
 
     @Override
-    public void render(float delta) {
+    public void render(float v) {
         Gdx.gl.glClearColor(1f,1f,1f,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        float xOffset = (1560-1280)/2f;
 
         game.getBatch().begin();
+        float xOffset = (1560-1280)/2f;
         game.getBatch().draw(background,-xOffset,0,1560,720);
-        game.getBatch().draw(playBtn,540,350,250,125);
-        game.getBatch().draw(exitBtn,540,250,250,125);
+        game.getBatch().draw(level1Btn,227,135,300,450);
+        game.getBatch().draw(num1,310,300,128,128);
+        game.getBatch().draw(level2Btn,757,135,300,450);
+        game.getBatch().draw(num2,850,300,128,128);
         game.getBatch().end();
     }
 
     @Override
-    public void resize(int width, int height) {
+    public void resize(int i, int i1) {
 
     }
 
@@ -74,8 +78,8 @@ public class Homescreen implements Screen, InputProcessor {
     @Override
     public void dispose() {
         background.dispose();
-        playBtn.dispose();
-        exitBtn.dispose();
+        level1Btn.dispose();
+        level2Btn.dispose();
     }
 
     @Override
@@ -98,13 +102,13 @@ public class Homescreen implements Screen, InputProcessor {
         touchPos.set(screenX, screenY, pointer);
         game.getCamera().unproject(touchPos);
 
-        if(playBtnBounds.contains(touchPos.x, touchPos.y)){
-            game.setScreen(new ChooseLevel(game));
+        if(level1BtnBounds.contains(touchPos.x, touchPos.y)){
+            game.setScreen(new GameEnd(game));
             return true;
         }
 
-        if(exitBtnBounds.contains(touchPos.x, touchPos.y)){
-            Gdx.app.exit();
+        if(level2BtnBounds.contains(touchPos.x, touchPos.y)){
+//                    game.setScreen();
             return true;
         }
 

@@ -1,58 +1,55 @@
 package com.game.angrybirds;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 
-
-public class Homescreen implements Screen, InputProcessor {
+public class PauseScreen implements Screen, InputProcessor {
     private final Main game;
     private Texture background;
-    private Texture playBtn;
+    private Texture resumeBtn;
     private Texture exitBtn;
-    private Rectangle playBtnBounds;
+    private Rectangle resumeBtnBounds;
     private Rectangle exitBtnBounds;
     private Vector3 touchPos;
+    private int level;
 
-    public Homescreen(Main game) {
+    public PauseScreen(Main game, String bg, int level) {
         this.game = game;
-        background = new Texture("home.png");
-        playBtn = new Texture("play.png");
-        exitBtn = new Texture("exit.png");
-
-        playBtnBounds = new Rectangle(540, 350, 250, 125);
-        exitBtnBounds = new Rectangle(540, 250, 250, 125);
+        this.level = level;
+        background = new Texture(bg);
+        resumeBtn = new Texture("resume.png");
+        exitBtn = new Texture("exit2.png");
+        resumeBtnBounds = new Rectangle(500, 250, 120, 120);
+        exitBtnBounds = new Rectangle(700, 250, 120, 120);
         touchPos = new Vector3();
 
         Gdx.input.setInputProcessor(this);
     }
 
     @Override
-    public void show(){
+    public void show() {
 
     }
 
     @Override
-    public void render(float delta) {
+    public void render(float v) {
         Gdx.gl.glClearColor(1f,1f,1f,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        float xOffset = (1560-1280)/2f;
-
         game.getBatch().begin();
-        game.getBatch().draw(background,-xOffset,0,1560,720);
-        game.getBatch().draw(playBtn,540,350,250,125);
-        game.getBatch().draw(exitBtn,540,250,250,125);
+        game.getBatch().draw(background,-0,0,1280,720);
+        game.getBatch().draw(resumeBtn,500,250,120,120);
+        game.getBatch().draw(exitBtn,700,250,120,120);
         game.getBatch().end();
     }
 
     @Override
-    public void resize(int width, int height) {
+    public void resize(int i, int i1) {
 
     }
 
@@ -74,7 +71,7 @@ public class Homescreen implements Screen, InputProcessor {
     @Override
     public void dispose() {
         background.dispose();
-        playBtn.dispose();
+        resumeBtn.dispose();
         exitBtn.dispose();
     }
 
@@ -98,8 +95,13 @@ public class Homescreen implements Screen, InputProcessor {
         touchPos.set(screenX, screenY, pointer);
         game.getCamera().unproject(touchPos);
 
-        if(playBtnBounds.contains(touchPos.x, touchPos.y)){
-            game.setScreen(new ChooseLevel(game));
+        if(resumeBtnBounds.contains(touchPos.x, touchPos.y)){
+            if(level == 1){
+//                game.setScreen();
+            }
+            else if(level == 2){
+//                game.setScreen();
+            }
             return true;
         }
 

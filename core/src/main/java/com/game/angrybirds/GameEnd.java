@@ -1,58 +1,67 @@
 package com.game.angrybirds;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.*;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 
-
-public class Homescreen implements Screen, InputProcessor {
+public class GameEnd implements Screen, InputProcessor {
     private final Main game;
-    private Texture background;
-    private Texture playBtn;
+    private Texture pigLaugh;
+    private Texture retryBtn;
     private Texture exitBtn;
-    private Rectangle playBtnBounds;
+    private BitmapFont font;
+    private Rectangle retryBtnBounds;
     private Rectangle exitBtnBounds;
     private Vector3 touchPos;
 
-    public Homescreen(Main game) {
+    GameEnd(Main game) {
         this.game = game;
-        background = new Texture("home.png");
-        playBtn = new Texture("play.png");
-        exitBtn = new Texture("exit.png");
+        pigLaugh = new Texture("piglaugh2.png");
+        retryBtn = new Texture("retry.png");
+        exitBtn = new Texture("exit3.png");
 
-        playBtnBounds = new Rectangle(540, 350, 250, 125);
-        exitBtnBounds = new Rectangle(540, 250, 250, 125);
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("Montserrat-SemiBold.otf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 50;
+        parameter.borderWidth = 2;
+        parameter.color = Color.WHITE;
+        parameter.borderColor = Color.BLACK;
+
+        font = generator.generateFont(parameter);
+        generator.dispose();
+
+        retryBtnBounds = new Rectangle();
+        exitBtnBounds = new Rectangle();
         touchPos = new Vector3();
 
         Gdx.input.setInputProcessor(this);
     }
 
+
     @Override
-    public void show(){
+    public void show() {
 
     }
 
     @Override
-    public void render(float delta) {
-        Gdx.gl.glClearColor(1f,1f,1f,1);
+    public void render(float v) {
+        Gdx.gl.glClearColor(0.047f, 0.322f, 0.118f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        float xOffset = (1560-1280)/2f;
-
         game.getBatch().begin();
-        game.getBatch().draw(background,-xOffset,0,1560,720);
-        game.getBatch().draw(playBtn,540,350,250,125);
-        game.getBatch().draw(exitBtn,540,250,250,125);
+        font.draw(game.getBatch(),"LEVEL FAILED!",470,600);
+        game.getBatch().draw(pigLaugh,430,300,502,250);
+        game.getBatch().draw(retryBtn,400,150,200,100);
+        game.getBatch().draw(exitBtn,700,150,200,100);
         game.getBatch().end();
     }
 
     @Override
-    public void resize(int width, int height) {
+    public void resize(int i, int i1) {
 
     }
 
@@ -73,9 +82,10 @@ public class Homescreen implements Screen, InputProcessor {
 
     @Override
     public void dispose() {
-        background.dispose();
-        playBtn.dispose();
+        pigLaugh.dispose();
+        retryBtn.dispose();
         exitBtn.dispose();
+        font.dispose();
     }
 
     @Override
@@ -98,8 +108,8 @@ public class Homescreen implements Screen, InputProcessor {
         touchPos.set(screenX, screenY, pointer);
         game.getCamera().unproject(touchPos);
 
-        if(playBtnBounds.contains(touchPos.x, touchPos.y)){
-            game.setScreen(new ChooseLevel(game));
+        if(retryBtnBounds.contains(touchPos.x, touchPos.y)){
+//            game.setScreen(new);
             return true;
         }
 
