@@ -1,4 +1,4 @@
-package com.game.angrybirds.screen;
+package com.game.angrybirds;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
