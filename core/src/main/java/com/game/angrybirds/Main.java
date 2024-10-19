@@ -1,4 +1,4 @@
-package com.game.angrybirds.screen;
+package com.game.angrybirds;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.OrthographicCamera;
