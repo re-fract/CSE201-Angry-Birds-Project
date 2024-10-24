@@ -29,7 +29,7 @@ public class Level1_Screen extends InputAdapter implements Screen {
         this.game = game;
 
         // Load textures
-        background = new Texture("game_background.png"); // Background for level 2
+        background = new Texture("level1.png"); // Background for level 2
         pig = new Texture("pig.png");                       // Pig texture
         slingshot = new Texture("slingshot.png");         // Slingshot texture
         block = new Texture("block.png");                   // Block texture
