@@ -15,7 +15,8 @@ public class Level2_Screen extends InputAdapter implements Screen {
     private Texture pig;
     private Texture slingshot;
     private Texture block;
-
+    private red_bird newbird;
+    private World world;
     // Rectangle bounds for detecting button clicks
     private Rectangle pauseBtnBounds;
     private Vector3 touchPoint;
@@ -38,6 +39,8 @@ public class Level2_Screen extends InputAdapter implements Screen {
     @Override
     public void show() {
         Gdx.input.setInputProcessor(this);
+        world = new World(new Vector2(0, -9.81f), true);
+        newbird = new red_bird(world, 90, 150);
     }
 
     @Override
@@ -48,7 +51,9 @@ public class Level2_Screen extends InputAdapter implements Screen {
         game.getBatch().begin();
         game.getBatch().draw(background, 0, 0, 1560, 720); // Draw background
         game.getBatch().draw(slingshot, 100, 150, 100, 200); // Draw slingshot
-        game.getBatch().draw(bird, 90, 150, 70, 70);      // Draw bird
+
+        Vector2 birdPosition = newbird.getBody().getPosition();
+       game.getBatch().draw(bird, birdPosition.x , birdPosition.y , 70, 70);
 
         // Draw blocks and pigs
         game.getBatch().draw(block, 900, 148, 100, 50);  // Block 1
