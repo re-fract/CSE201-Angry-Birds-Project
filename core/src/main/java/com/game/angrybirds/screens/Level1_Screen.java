@@ -44,7 +44,7 @@ public class Level1_Screen extends InputAdapter implements Screen {
     public void show() {
         Gdx.input.setInputProcessor(this);
         world = new World(new Vector2(0, -9.81f), true);
-        newbird = new Red_Bird(world, 90, 150);
+        newbird = new Red_Bird(world, 90, 100);
     }
 
     @Override
@@ -53,25 +53,25 @@ public class Level1_Screen extends InputAdapter implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         game.getBatch().begin();
-        game.getBatch().draw(background, 0, 0, 1560, 720); // Draw background
-        game.getBatch().draw(slingshot, 100, 150, 100, 200); // Draw slingshot
+        game.getBatch().draw(background, 0, 0, 1280, 720); // Draw background
+        game.getBatch().draw(slingshot, 100, 100, 100, 200); // Draw slingshot
 
         Vector2 birdPosition = newbird.getBody().getPosition();
-       game.getBatch().draw(bird, birdPosition.x , birdPosition.y , 70, 70);
+        game.getBatch().draw(bird, birdPosition.x , birdPosition.y , 70, 70);
 
         // Draw blocks and pigs
-        game.getBatch().draw(block, 900, 148, 100, 50);  // Block 1
-        game.getBatch().draw(block, 1000, 148, 100, 50); // Block 2
-        game.getBatch().draw(block, 1100, 148, 100, 50); // Block 3
+        game.getBatch().draw(block, 800, 100, 100, 50);  // Block 1
+        game.getBatch().draw(block, 900, 100, 100, 50); // Block 2
+        game.getBatch().draw(block, 1000, 100, 100, 50); // Block 3
 
-        game.getBatch().draw(block, 950, 192, 100, 50);  // Block 4
-        game.getBatch().draw(pig, 1050, 192, 70, 70);    // Pig in the middle
-        game.getBatch().draw(block, 1150, 192, 100, 50); // Block 5
+        game.getBatch().draw(block, 850, 144, 100, 50);  // Block 4
+        game.getBatch().draw(pig, 950, 144, 70, 70);    // Pig in the middle
+        game.getBatch().draw(block, 1050, 144, 100, 50); // Block 5
 
-        game.getBatch().draw(block, 1000, 237, 100, 50); // Block 6
-        game.getBatch().draw(block, 1100, 237, 100, 50); // Block 7
+        game.getBatch().draw(block, 900, 190, 100, 50); // Block 6
+        game.getBatch().draw(block, 1000, 190, 100, 50); // Block 7
 
-        game.getBatch().draw(pig, 1050, 285, 70, 70);    // Pig on top
+        game.getBatch().draw(pig, 950, 235, 70, 70);    // Pig on top
 
 
         game.getBatch().draw(new Texture("pause.png"), pauseBtnBounds.x, pauseBtnBounds.y, pauseBtnBounds.width, pauseBtnBounds.height); // Draw pause button

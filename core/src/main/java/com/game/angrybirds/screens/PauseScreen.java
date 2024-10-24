@@ -42,7 +42,7 @@ public class PauseScreen implements Screen, InputProcessor {
         Gdx.gl.glClearColor(1f,1f,1f,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         game.getBatch().begin();
-        game.getBatch().draw(background,-0,0,1280,720);
+        game.getBatch().draw(background,0,0,1280,720);
         game.getBatch().draw(resumeBtn,500,250,120,120);
         game.getBatch().draw(exitBtn,700,250,120,120);
         game.getBatch().end();
