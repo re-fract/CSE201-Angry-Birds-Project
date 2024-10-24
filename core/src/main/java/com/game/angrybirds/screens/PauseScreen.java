@@ -97,7 +97,7 @@ public class PauseScreen implements Screen, InputProcessor {
 
         if(resumeBtnBounds.contains(touchPos.x, touchPos.y)){
             if(level == 1){
-//                game.setScreen();
+                game.setScreen(new Level1_Screen(game));
             }
             else if(level == 2){
 //                game.setScreen();
