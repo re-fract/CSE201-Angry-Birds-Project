@@ -1,47 +1,39 @@
-package com.game.angrybirds;
+package com.game.angrybirds.screens;
 
-import com.badlogic.gdx.*;
-import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
+import com.game.angrybirds.Main;
 
-public class GameEnd implements Screen, InputProcessor {
+public class ChooseLevel implements Screen, InputProcessor {
     private final Main game;
-    private Texture pigLaugh;
-    private Texture retryBtn;
-    private Texture exitBtn;
-    private BitmapFont font;
-    private Rectangle retryBtnBounds;
-    private Rectangle exitBtnBounds;
+    private Texture background;
+    private Texture level1Btn;
+    private Texture level2Btn;
+    private Texture num1;
+    private Texture num2;
+    private Rectangle level1BtnBounds;
+    private Rectangle level2BtnBounds;
     private Vector3 touchPos;
 
-    GameEnd(Main game) {
+
+    public ChooseLevel(Main game) {
         this.game = game;
-        pigLaugh = new Texture("piglaugh2.png");
-        retryBtn = new Texture("retry.png");
-        exitBtn = new Texture("exit3.png");
-
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("Montserrat-SemiBold.otf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 50;
-        parameter.borderWidth = 2;
-        parameter.color = Color.WHITE;
-        parameter.borderColor = Color.BLACK;
-
-        font = generator.generateFont(parameter);
-        generator.dispose();
-
-        retryBtnBounds = new Rectangle();
-        exitBtnBounds = new Rectangle();
+        background = new Texture("home.png");
+        level1Btn = new Texture("level1Btn.png");
+        level2Btn = new Texture("level2Btn.png");
+        num1 = new Texture("one.png");
+        num2 = new Texture("two.png");
+        level1BtnBounds = new Rectangle(227,135,350,450);
+        level2BtnBounds = new Rectangle(757,135,350,450);
         touchPos = new Vector3();
 
         Gdx.input.setInputProcessor(this);
     }
-
 
     @Override
     public void show() {
@@ -50,13 +42,16 @@ public class GameEnd implements Screen, InputProcessor {
 
     @Override
     public void render(float v) {
-        Gdx.gl.glClearColor(0.047f, 0.322f, 0.118f, 1);
+        Gdx.gl.glClearColor(1f,1f,1f,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
         game.getBatch().begin();
-        font.draw(game.getBatch(),"LEVEL FAILED!",470,600);
-        game.getBatch().draw(pigLaugh,430,300,502,250);
-        game.getBatch().draw(retryBtn,400,150,200,100);
-        game.getBatch().draw(exitBtn,700,150,200,100);
+        float xOffset = (1560-1280)/2f;
+        game.getBatch().draw(background,-xOffset,0,1560,720);
+        game.getBatch().draw(level1Btn,227,135,300,450);
+        game.getBatch().draw(num1,310,300,128,128);
+        game.getBatch().draw(level2Btn,757,135,300,450);
+        game.getBatch().draw(num2,850,300,128,128);
         game.getBatch().end();
     }
 
@@ -82,10 +77,9 @@ public class GameEnd implements Screen, InputProcessor {
 
     @Override
     public void dispose() {
-        pigLaugh.dispose();
-        retryBtn.dispose();
-        exitBtn.dispose();
-        font.dispose();
+        background.dispose();
+        level1Btn.dispose();
+        level2Btn.dispose();
     }
 
     @Override
@@ -108,13 +102,13 @@ public class GameEnd implements Screen, InputProcessor {
         touchPos.set(screenX, screenY, pointer);
         game.getCamera().unproject(touchPos);
 
-        if(retryBtnBounds.contains(touchPos.x, touchPos.y)){
-//            game.setScreen(new);
+        if(level1BtnBounds.contains(touchPos.x, touchPos.y)){
+            game.setScreen(new GameEnd(game));
             return true;
         }
 
-        if(exitBtnBounds.contains(touchPos.x, touchPos.y)){
-            Gdx.app.exit();
+        if(level2BtnBounds.contains(touchPos.x, touchPos.y)){
+//                    game.setScreen();
             return true;
         }
 

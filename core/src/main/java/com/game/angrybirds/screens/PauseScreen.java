@@ -1,35 +1,32 @@
-package com.game.angrybirds;
+package com.game.angrybirds.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
+import com.game.angrybirds.Main;
 
-public class ChooseLevel implements Screen, InputProcessor {
+public class PauseScreen implements Screen, InputProcessor {
     private final Main game;
     private Texture background;
-    private Texture level1Btn;
-    private Texture level2Btn;
-    private Texture num1;
-    private Texture num2;
-    private Rectangle level1BtnBounds;
-    private Rectangle level2BtnBounds;
+    private Texture resumeBtn;
+    private Texture exitBtn;
+    private Rectangle resumeBtnBounds;
+    private Rectangle exitBtnBounds;
     private Vector3 touchPos;
+    private int level;
 
-
-    public ChooseLevel(Main game) {
+    public PauseScreen(Main game, String bg, int level) {
         this.game = game;
-        background = new Texture("home.png");
-        level1Btn = new Texture("level1Btn.png");
-        level2Btn = new Texture("level2Btn.png");
-        num1 = new Texture("one.png");
-        num2 = new Texture("two.png");
-        level1BtnBounds = new Rectangle(227,135,350,450);
-        level2BtnBounds = new Rectangle(757,135,350,450);
+        this.level = level;
+        background = new Texture(bg);
+        resumeBtn = new Texture("resume.png");
+        exitBtn = new Texture("exit2.png");
+        resumeBtnBounds = new Rectangle(500, 250, 120, 120);
+        exitBtnBounds = new Rectangle(700, 250, 120, 120);
         touchPos = new Vector3();
 
         Gdx.input.setInputProcessor(this);
@@ -44,14 +41,10 @@ public class ChooseLevel implements Screen, InputProcessor {
     public void render(float v) {
         Gdx.gl.glClearColor(1f,1f,1f,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
         game.getBatch().begin();
-        float xOffset = (1560-1280)/2f;
-        game.getBatch().draw(background,-xOffset,0,1560,720);
-        game.getBatch().draw(level1Btn,227,135,300,450);
-        game.getBatch().draw(num1,310,300,128,128);
-        game.getBatch().draw(level2Btn,757,135,300,450);
-        game.getBatch().draw(num2,850,300,128,128);
+        game.getBatch().draw(background,-0,0,1280,720);
+        game.getBatch().draw(resumeBtn,500,250,120,120);
+        game.getBatch().draw(exitBtn,700,250,120,120);
         game.getBatch().end();
     }
 
@@ -78,8 +71,8 @@ public class ChooseLevel implements Screen, InputProcessor {
     @Override
     public void dispose() {
         background.dispose();
-        level1Btn.dispose();
-        level2Btn.dispose();
+        resumeBtn.dispose();
+        exitBtn.dispose();
     }
 
     @Override
@@ -102,13 +95,18 @@ public class ChooseLevel implements Screen, InputProcessor {
         touchPos.set(screenX, screenY, pointer);
         game.getCamera().unproject(touchPos);
 
-        if(level1BtnBounds.contains(touchPos.x, touchPos.y)){
-            game.setScreen(new GameEnd(game));
+        if(resumeBtnBounds.contains(touchPos.x, touchPos.y)){
+            if(level == 1){
+//                game.setScreen();
+            }
+            else if(level == 2){
+//                game.setScreen();
+            }
             return true;
         }
 
-        if(level2BtnBounds.contains(touchPos.x, touchPos.y)){
-//                    game.setScreen();
+        if(exitBtnBounds.contains(touchPos.x, touchPos.y)){
+            Gdx.app.exit();
             return true;
         }
 
