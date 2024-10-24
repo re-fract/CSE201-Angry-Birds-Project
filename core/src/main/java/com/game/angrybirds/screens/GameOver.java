@@ -10,7 +10,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.game.angrybirds.Main;
 
-public class GameEnd implements Screen, InputProcessor {
+public class GameOver implements Screen, InputProcessor {
     private final Main game;
     private Texture pigLaugh;
     private Texture retryBtn;
@@ -20,7 +20,7 @@ public class GameEnd implements Screen, InputProcessor {
     private Rectangle exitBtnBounds;
     private Vector3 touchPos;
 
-    GameEnd(Main game) {
+    GameOver(Main game) {
         this.game = game;
         pigLaugh = new Texture("piglaugh2.png");
         retryBtn = new Texture("retry.png");

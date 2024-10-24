@@ -21,12 +21,12 @@ public class Homescreen implements Screen, InputProcessor {
 
     public Homescreen(Main game) {
         this.game = game;
-        background = new Texture("home.png");
+        background = new Texture("home2.jpg");
         playBtn = new Texture("play.png");
         exitBtn = new Texture("exit.png");
 
-        playBtnBounds = new Rectangle(540, 350, 250, 125);
-        exitBtnBounds = new Rectangle(540, 250, 250, 125);
+        playBtnBounds = new Rectangle(520, 250, 250, 125);
+        exitBtnBounds = new Rectangle(520, 150, 250, 125);
         touchPos = new Vector3();
 
         Gdx.input.setInputProcessor(this);
@@ -41,12 +41,12 @@ public class Homescreen implements Screen, InputProcessor {
     public void render(float delta) {
         Gdx.gl.glClearColor(1f,1f,1f,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        float xOffset = (1560-1280)/2f;
+//        float xOffset = (1560-1280)/2f;
 
         game.getBatch().begin();
-        game.getBatch().draw(background,-xOffset,0,1560,720);
-        game.getBatch().draw(playBtn,540,350,250,125);
-        game.getBatch().draw(exitBtn,540,250,250,125);
+        game.getBatch().draw(background,0,0,1280,720);
+        game.getBatch().draw(playBtn,520,250,250,125);
+        game.getBatch().draw(exitBtn,520,150,250,125);
         game.getBatch().end();
     }
 

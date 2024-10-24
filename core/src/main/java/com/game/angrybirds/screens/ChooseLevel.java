@@ -46,8 +46,7 @@ public class ChooseLevel implements Screen, InputProcessor {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         game.getBatch().begin();
-        float xOffset = (1560-1280)/2f;
-        game.getBatch().draw(background,-xOffset,0,1560,720);
+        game.getBatch().draw(background,0,0,1280,720);
         game.getBatch().draw(level1Btn,227,135,300,450);
         game.getBatch().draw(num1,310,300,128,128);
         game.getBatch().draw(level2Btn,757,135,300,450);

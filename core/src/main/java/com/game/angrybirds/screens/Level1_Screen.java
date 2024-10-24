@@ -37,7 +37,7 @@ public class Level1_Screen extends InputAdapter implements Screen {
 
         // Set up touch point and pause button bounds
         touchPoint = new Vector3();
-        pauseBtnBounds = new Rectangle(10, 10, 50, 50); // Set bounds for the pause button
+        pauseBtnBounds = new Rectangle(1220, 660, 50, 50); // Set bounds for the pause button
     }
 
     @Override
