@@ -11,6 +11,8 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.World;
 import com.game.angrybirds.Main;
 import com.game.angrybirds.bird.*;
+import com.game.angrybirds.block.ParentBlock;
+import com.game.angrybirds.block.WoodBlock;
 import com.game.angrybirds.pig.*;
 
 import java.util.ArrayList;
@@ -20,10 +22,11 @@ public class Level1_Screen extends InputAdapter implements Screen {
     private Texture background;
     private Texture bird;
     private ArrayList<ParentPig> pigs;
+    private ArrayList<ParentBlock> blocks;
     private Texture slingshot;
-    private Texture block;
     private RedBird newbird;
     private World world;
+
     // Rectangle bounds for detecting button clicks
     private Rectangle pauseBtnBounds;
     private Vector3 touchPoint;
@@ -35,8 +38,8 @@ public class Level1_Screen extends InputAdapter implements Screen {
         // Load textures
         background = new Texture("level1.png"); // Background for level 2
         pigs = new ArrayList<>();
+        blocks = new ArrayList<>();
         slingshot = new Texture("slingshot.png");         // Slingshot texture
-        block = new Texture("block.png");                   // Block texture
         bird = new Texture("redbird.png");                     // Bird texture
 
         // Set up touch point and pause button bounds
@@ -52,6 +55,14 @@ public class Level1_Screen extends InputAdapter implements Screen {
         newbird = new RedBird(world, 90, 100);
         pigs.add(new NormalPig(world,950,235));
         pigs.add(new CrownPig(world,950,144));
+
+        blocks.add(new WoodBlock(world,800,100));
+        blocks.add(new WoodBlock(world,900,100));
+        blocks.add(new WoodBlock(world,1000,100));
+        blocks.add(new WoodBlock(world,850,144));
+        blocks.add(new WoodBlock(world,1050,144));
+        blocks.add(new WoodBlock(world,900,190));
+        blocks.add(new WoodBlock(world,1000,190));
     }
 
     @Override
@@ -66,14 +77,9 @@ public class Level1_Screen extends InputAdapter implements Screen {
         Vector2 birdPosition = newbird.getBody().getPosition();
         game.getBatch().draw(bird, birdPosition.x , birdPosition.y , 70, 70);
 
-        // Draw blocks and pigs
-        game.getBatch().draw(block, 800, 100, 100, 50);  // Block 1
-        game.getBatch().draw(block, 900, 100, 100, 50); // Block 2
-        game.getBatch().draw(block, 1000, 100, 100, 50); // Block 3
-        game.getBatch().draw(block, 850, 144, 100, 50);  // Block 4
-        game.getBatch().draw(block, 1050, 144, 100, 50); // Block 5
-        game.getBatch().draw(block, 900, 190, 100, 50); // Block 6
-        game.getBatch().draw(block, 1000, 190, 100, 50); // Block 7
+        for(ParentBlock block : blocks) {
+            block.render(game.getBatch());
+        }
 
         for(ParentPig pig : pigs) {
             pig.render(game.getBatch());
@@ -105,7 +111,9 @@ public class Level1_Screen extends InputAdapter implements Screen {
         background.dispose();
         bird.dispose();
         slingshot.dispose();
-        block.dispose();
+        for(ParentBlock block : blocks) {
+            block.dispose();
+        }
         for(ParentPig pig : pigs) {
             pig.dispose();
         }

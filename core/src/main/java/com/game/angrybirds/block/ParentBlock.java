@@ -3,8 +3,7 @@ package com.game.angrybirds.block;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.*;
 
 public class ParentBlock {
     protected Texture texture;
@@ -23,6 +22,27 @@ public class ParentBlock {
         this.width = width;
         this.height = height;
 
+        createBody();
+    }
+
+    public void createBody() {
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.position.set(position.x, position.y);
+
+        body = world.createBody(bodyDef); //Create body in the world
+
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(width/2f, height/2f);
+
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = shape;
+        fixtureDef.density = 0.5f;
+        fixtureDef.friction = 0.4f;
+        fixtureDef.restitution = 0.6f;
+
+        body.createFixture(fixtureDef);
+        shape.dispose();
     }
 
     public void render(SpriteBatch batch) {
@@ -32,5 +52,6 @@ public class ParentBlock {
 
     public void dispose() {
         texture.dispose();
+        world.destroyBody(body);
     }
 }
