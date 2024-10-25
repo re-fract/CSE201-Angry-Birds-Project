@@ -74,8 +74,9 @@ public class Level1_Screen extends InputAdapter implements Screen {
         game.getBatch().draw(background, 0, 0, 1280, 720); // Draw background
         game.getBatch().draw(slingshot, 100, 100, 100, 200); // Draw slingshot
 
-        Vector2 birdPosition = newbird.getBody().getPosition();
-        game.getBatch().draw(bird, birdPosition.x , birdPosition.y , 70, 70);
+        //Vector2 birdPosition = newbird.getBody().getPosition();
+        //game.getBatch().draw(bird, birdPosition.x , birdPosition.y , 70, 70);
+        newbird.render(game.getBatch());
 
         for(ParentBlock block : blocks) {
             block.render(game.getBatch());
