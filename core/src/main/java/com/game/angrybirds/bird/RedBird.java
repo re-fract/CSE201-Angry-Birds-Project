@@ -1,12 +1,12 @@
 package com.game.angrybirds.bird;
-
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.physics.box2d.*;
-
-public class RedBird extends ParentBird{
+public class red_bird extends parent_bird{
     private Body body;
     CircleShape shape;
-    public RedBird(World world, float x, float y) {
-        super(100,50);
+    public red_bird(World world, float x, float y, Texture texture,int width,int height) {
+        super(100,50,texture,x,y,width,height);
+
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
@@ -26,5 +26,6 @@ public class RedBird extends ParentBird{
     public Body getBody() {
         return  body;
     }
+
 }
 
