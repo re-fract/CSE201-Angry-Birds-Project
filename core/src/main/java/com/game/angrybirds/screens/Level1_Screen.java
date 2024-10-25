@@ -27,6 +27,7 @@ public class Level1_Screen extends InputAdapter implements Screen {
     // Rectangle bounds for detecting button clicks
     private Rectangle pauseBtnBounds;
     private Vector3 touchPoint;
+    private Texture pauseBtnTexture;
 
     public Level1_Screen(Main game) {
         this.game = game;
@@ -34,15 +35,13 @@ public class Level1_Screen extends InputAdapter implements Screen {
         // Load textures
         background = new Texture("level1.png"); // Background for level 2
         pigs = new ArrayList<>();
-        pigs.add(new NormalPig(950,235));
-        pigs.add(new CrownPig(950,144));
-
         slingshot = new Texture("slingshot.png");         // Slingshot texture
         block = new Texture("block.png");                   // Block texture
         bird = new Texture("redbird.png");                     // Bird texture
 
         // Set up touch point and pause button bounds
         touchPoint = new Vector3();
+        pauseBtnTexture = new Texture("pause.png");
         pauseBtnBounds = new Rectangle(1220, 660, 50, 50); // Set bounds for the pause button
     }
 
@@ -51,6 +50,8 @@ public class Level1_Screen extends InputAdapter implements Screen {
         Gdx.input.setInputProcessor(this);
         world = new World(new Vector2(0, -9.81f), true);
         newbird = new RedBird(world, 90, 100);
+        pigs.add(new NormalPig(world,950,235));
+        pigs.add(new CrownPig(world,950,144));
     }
 
     @Override
@@ -78,8 +79,7 @@ public class Level1_Screen extends InputAdapter implements Screen {
             pig.render(game.getBatch());
         }
 
-
-        game.getBatch().draw(new Texture("pause.png"), pauseBtnBounds.x, pauseBtnBounds.y, pauseBtnBounds.width, pauseBtnBounds.height); // Draw pause button
+        game.getBatch().draw(pauseBtnTexture, pauseBtnBounds.x, pauseBtnBounds.y, pauseBtnBounds.width, pauseBtnBounds.height); // Draw pause button
 
         game.getBatch().end();
     }

@@ -33,8 +33,8 @@ public class ParentPig {
 
         body = world.createBody(bodyDef); //Create body in the world
 
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox(width, height);
+        CircleShape shape = new CircleShape();
+        shape.setRadius(49.5f);
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
@@ -52,7 +52,7 @@ public class ParentPig {
 
     public void render(SpriteBatch batch) {
         if(isAlive()) {
-            batch.draw(texture, position.x, position.y, width, height);
+            batch.draw(texture,position.x,position.y,width,height);
         }
     }
 
