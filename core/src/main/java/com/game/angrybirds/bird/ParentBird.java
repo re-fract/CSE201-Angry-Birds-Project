@@ -12,10 +12,10 @@ abstract class ParentBird {
     protected float m;
     protected int width;
     protected int height;
-    public ParentBird(int Health_point_Dec, int speed,Texture texture,float l,float m,int width,int height) {
+    public ParentBird(int Health_point_Dec, int speed,String texture,float l,float m,int width,int height) {
         this.Health_point_Dec = Health_point_Dec;
         this.speed = speed;
-        this.texture = texture;
+        this.texture = new Texture(texture);
         this.l = l;
         this.m = m;
         this.width = width;

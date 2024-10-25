@@ -6,8 +6,8 @@ import com.badlogic.gdx.physics.box2d.*;
 public class YellowBird extends ParentBird{
     private Body body;
     private PolygonShape shape;
-    public YellowBird(World world, float x, float y, Texture texture,int width,int hight) {
-        super(200,100,texture,x,y,width,hight);
+    public YellowBird(World world, float x, float y) {
+        super(200,100,"yellowbird.png",x,y,70,70);
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(x, y);

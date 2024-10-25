@@ -6,8 +6,8 @@ import com.badlogic.gdx.physics.box2d.*;
 public class BlackBird extends ParentBird{
     private Body body;
     private CircleShape shape;
-    public BlackBird(World world, float x, float y, Texture texture,int height, int width) {
-        super(300,50,texture,x,y,width,height );
+    public BlackBird(World world, float x, float y) {
+        super(300,50,"blackbird.png",x,y,70,70);
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
@@ -23,6 +23,5 @@ public class BlackBird extends ParentBird{
         fixtureDef.friction = 3f;
         fixtureDef.restitution = 6f;
         body.createFixture(fixtureDef);
-
     }
 }

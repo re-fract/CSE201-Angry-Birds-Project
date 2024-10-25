@@ -4,8 +4,8 @@ import com.badlogic.gdx.physics.box2d.*;
 public class RedBird extends ParentBird{
     private Body body;
     CircleShape shape;
-    public RedBird(World world, float x, float y, Texture texture,int width,int height) {
-        super(100,50,texture,x,y,width,height);
+    public RedBird(World world, float x, float y) {
+        super(100,50,"redbird.png",x,y,70,70);
 
 
         BodyDef bodyDef = new BodyDef();
