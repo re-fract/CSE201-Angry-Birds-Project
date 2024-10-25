@@ -23,7 +23,7 @@ public class red_bird extends parent_bird{
         fixtureDef.restitution = 6f;
         body.createFixture(fixtureDef);
     }
-    Body getBody() {
+    public Body getBody() {
         return  body;
     }
 }
