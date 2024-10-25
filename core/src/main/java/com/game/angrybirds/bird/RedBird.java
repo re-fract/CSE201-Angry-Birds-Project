@@ -5,7 +5,7 @@ public class RedBird extends ParentBird{
     private Body body;
     CircleShape shape;
     public RedBird(World world, float x, float y) {
-        super(100,50,"redbird.png",x,y,70,70);
+        super(world,100,50,"redbird.png",x,y,70,70);
 
 
         BodyDef bodyDef = new BodyDef();
@@ -22,6 +22,12 @@ public class RedBird extends ParentBird{
         fixtureDef.friction = 3f;
         fixtureDef.restitution = 6f;
         body.createFixture(fixtureDef);
+    }
+
+    @Override
+    public void dispose(){
+        super.dispose();
+        world.destroyBody(body);
     }
     public Body getBody() {
         return  body;

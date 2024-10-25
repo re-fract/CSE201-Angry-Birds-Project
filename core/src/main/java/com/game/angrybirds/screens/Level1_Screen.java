@@ -111,6 +111,7 @@ public class Level1_Screen extends InputAdapter implements Screen {
     public void dispose() {
         background.dispose();
         slingshot.dispose();
+        redBird.dispose();
         for(ParentBlock block : blocks) {
             block.dispose();
         }

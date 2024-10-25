@@ -7,7 +7,7 @@ public class BlackBird extends ParentBird{
     private Body body;
     private CircleShape shape;
     public BlackBird(World world, float x, float y) {
-        super(300,50,"blackbird.png",x,y,70,70);
+        super(world,300,50,"blackbird.png",x,y,70,70);
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
@@ -23,5 +23,11 @@ public class BlackBird extends ParentBird{
         fixtureDef.friction = 3f;
         fixtureDef.restitution = 6f;
         body.createFixture(fixtureDef);
+    }
+
+    @Override
+    public void dispose(){
+        super.dispose();
+        world.destroyBody(body);
     }
 }

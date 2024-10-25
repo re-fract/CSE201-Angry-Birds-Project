@@ -3,16 +3,18 @@ package com.game.angrybirds.bird;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.World;
 
 abstract class ParentBird {
     protected int Health_point_Dec;
     protected int speed;
+    protected World world;
     protected Texture texture;
     protected float x;
     protected float y;
     protected int width;
     protected int height;
-    public ParentBird(int Health_point_Dec, int speed,String texture,float x,float y,int width,int height) {
+    public ParentBird(World world, int Health_point_Dec, int speed,String texture,float x,float y,int width,int height) {
         this.Health_point_Dec = Health_point_Dec;
         this.speed = speed;
         this.texture = new Texture(texture);
@@ -24,5 +26,8 @@ abstract class ParentBird {
     public void render(SpriteBatch batch) {
         Vector2 position = new Vector2(x, y);
         batch.draw(texture,position.x,position.y,width,height);
+    }
+    public void dispose(){
+        texture.dispose();
     }
 }

@@ -7,7 +7,7 @@ public class YellowBird extends ParentBird{
     private Body body;
     private PolygonShape shape;
     public YellowBird(World world, float x, float y) {
-        super(200,100,"yellowbird.png",x,y,70,70);
+        super(world,200,100,"yellowbird.png",x,y,70,70);
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(x, y);
@@ -26,5 +26,11 @@ public class YellowBird extends ParentBird{
         fixtureDef.friction = 3f;
         fixtureDef.restitution = 6f;
         body.createFixture(fixtureDef);
+    }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+        world.destroyBody(body);
     }
 }
