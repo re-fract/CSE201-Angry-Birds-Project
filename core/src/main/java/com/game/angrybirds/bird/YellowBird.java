@@ -1,12 +1,13 @@
 package com.game.angrybirds.bird;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 
-public class YellowBird extends ParentBird{
+public class Yellow_Bird extends parent_bird{
     private Body body;
     private PolygonShape shape;
-    public YellowBird(World world, float x, float y) {
-        super( 200,100);
+    public Yellow_Bird(World world, float x, float y, Texture texture,int width,int hight) {
+        super( 200,100,texture,x,y,width,hight);
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(x, y);
