@@ -20,17 +20,16 @@ import java.util.ArrayList;
 public class Level1_Screen extends InputAdapter implements Screen {
     private final Main game;
     private Texture background;
-    private Texture bird;
     private ArrayList<ParentPig> pigs;
     private ArrayList<ParentBlock> blocks;
+    private RedBird redBird;
     private Texture slingshot;
-    private RedBird newbird;
+    private Texture pauseBtnTexture;
     private World world;
 
     // Rectangle bounds for detecting button clicks
     private Rectangle pauseBtnBounds;
     private Vector3 touchPoint;
-    private Texture pauseBtnTexture;
 
     public Level1_Screen(Main game) {
         this.game = game;
@@ -39,12 +38,12 @@ public class Level1_Screen extends InputAdapter implements Screen {
         background = new Texture("level1.png"); // Background for level 2
         pigs = new ArrayList<>();
         blocks = new ArrayList<>();
+
+        pauseBtnTexture = new Texture("pause.png");
         slingshot = new Texture("slingshot.png");         // Slingshot texture
-        bird = new Texture("redbird.png");                     // Bird texture
 
         // Set up touch point and pause button bounds
         touchPoint = new Vector3();
-        pauseBtnTexture = new Texture("pause.png");
         pauseBtnBounds = new Rectangle(1220, 660, 50, 50); // Set bounds for the pause button
     }
 
@@ -52,7 +51,9 @@ public class Level1_Screen extends InputAdapter implements Screen {
     public void show() {
         Gdx.input.setInputProcessor(this);
         world = new World(new Vector2(0, -9.81f), true);
-        newbird = new RedBird(world,90, 100);
+
+        redBird = new RedBird(world,90,100);
+
         pigs.add(new NormalPig(world,950,235));
         pigs.add(new CrownPig(world,950,144));
 
@@ -74,9 +75,8 @@ public class Level1_Screen extends InputAdapter implements Screen {
         game.getBatch().draw(background, 0, 0, 1280, 720); // Draw background
         game.getBatch().draw(slingshot, 100, 100, 100, 200); // Draw slingshot
 
-        //Vector2 birdPosition = newbird.getBody().getPosition();
-        //game.getBatch().draw(bird, birdPosition.x , birdPosition.y , 70, 70);
-        newbird.render(game.getBatch());
+
+        redBird.render(game.getBatch());
 
         for(ParentBlock block : blocks) {
             block.render(game.getBatch());
@@ -110,7 +110,6 @@ public class Level1_Screen extends InputAdapter implements Screen {
     @Override
     public void dispose() {
         background.dispose();
-        bird.dispose();
         slingshot.dispose();
         for(ParentBlock block : blocks) {
             block.dispose();

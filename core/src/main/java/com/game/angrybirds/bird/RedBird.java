@@ -14,7 +14,7 @@ public class RedBird extends ParentBird{
         body = world.createBody(bodyDef);
 
         shape = new CircleShape();
-        shape.setRadius(30f);
+        shape.setRadius(49.5f);
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
