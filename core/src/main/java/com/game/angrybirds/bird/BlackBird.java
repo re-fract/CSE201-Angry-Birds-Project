@@ -1,10 +1,14 @@
 package com.game.angrybirds.bird;
+
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.physics.box2d.*;
-public class BlackBird extends ParentBird{
+
+public class Black_bird extends parent_bird{
     private Body body;
     private CircleShape shape;
-    public BlackBird(World world, float x, float y) {
-        super(300,50);
+    public Black_bird(World world, float x, float y, Texture texture,int height, int width) {
+        super(300,50,texture,x,y,width,height );
+
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(x, y);
