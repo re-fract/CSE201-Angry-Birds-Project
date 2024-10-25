@@ -3,8 +3,11 @@ package com.game.angrybirds.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.game.angrybirds.Main;
@@ -14,6 +17,7 @@ public class PauseScreen implements Screen, InputProcessor {
     private Texture background;
     private Texture resumeBtn;
     private Texture exitBtn;
+    private BitmapFont font;
     private Rectangle resumeBtnBounds;
     private Rectangle exitBtnBounds;
     private Vector3 touchPos;
@@ -25,6 +29,17 @@ public class PauseScreen implements Screen, InputProcessor {
         background = new Texture(bg);
         resumeBtn = new Texture("resume.png");
         exitBtn = new Texture("exit2.png");
+
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("Montserrat-SemiBold.otf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 75;
+        parameter.borderWidth = 2;
+        parameter.color = new Color(188 / 255f, 104 / 255f, 53 / 255f, 1.0f);
+        parameter.borderColor = Color.BLACK;
+
+        font = generator.generateFont(parameter);
+        generator.dispose();
+
         resumeBtnBounds = new Rectangle(500, 250, 120, 120);
         exitBtnBounds = new Rectangle(700, 250, 120, 120);
         touchPos = new Vector3();
@@ -43,6 +58,7 @@ public class PauseScreen implements Screen, InputProcessor {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         game.getBatch().begin();
         game.getBatch().draw(background,0,0,1280,720);
+        font.draw(game.getBatch(),"PAUSED!",490,450);
         game.getBatch().draw(resumeBtn,500,250,120,120);
         game.getBatch().draw(exitBtn,700,250,120,120);
         game.getBatch().end();
