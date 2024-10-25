@@ -52,7 +52,7 @@ public class Level1_Screen extends InputAdapter implements Screen {
     public void show() {
         Gdx.input.setInputProcessor(this);
         world = new World(new Vector2(0, -9.81f), true);
-        newbird = new RedBird(world, 90, 100);
+        newbird = new RedBird(world,90, 100);
         pigs.add(new NormalPig(world,950,235));
         pigs.add(new CrownPig(world,950,144));
 

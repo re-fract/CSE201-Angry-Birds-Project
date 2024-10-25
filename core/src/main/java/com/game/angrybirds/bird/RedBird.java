@@ -1,10 +1,10 @@
 package com.game.angrybirds.bird;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.physics.box2d.*;
-public class red_bird extends parent_bird{
+public class RedBird extends ParentBird{
     private Body body;
     CircleShape shape;
-    public red_bird(World world, float x, float y, Texture texture,int width,int height) {
+    public RedBird(World world, float x, float y, Texture texture,int width,int height) {
         super(100,50,texture,x,y,width,height);
 
 

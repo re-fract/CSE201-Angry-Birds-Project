@@ -1,13 +1,18 @@
 package com.game.angrybirds.bird;
-public abstract class ParentBird {
-    public int Health_point_Dec;
-    public int speed;
-    public Texture texture;
-    public float l;
-    public float m;
-    public int width;
-    public int height;
-    public parent_bird(int Health_point_Dec, int speed,Texture texture,float l,float m,int width,int height) {
+
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
+
+abstract class ParentBird {
+    protected int Health_point_Dec;
+    protected int speed;
+    protected Texture texture;
+    protected float l;
+    protected float m;
+    protected int width;
+    protected int height;
+    public ParentBird(int Health_point_Dec, int speed,Texture texture,float l,float m,int width,int height) {
         this.Health_point_Dec = Health_point_Dec;
         this.speed = speed;
         this.texture = texture;
