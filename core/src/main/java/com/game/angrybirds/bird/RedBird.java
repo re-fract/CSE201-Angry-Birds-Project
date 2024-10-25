@@ -2,10 +2,10 @@ package com.game.angrybirds.bird;
 
 import com.badlogic.gdx.physics.box2d.*;
 
-public class red_bird extends parent_bird{
+public class RedBird extends ParentBird{
     private Body body;
     CircleShape shape;
-    public red_bird(World world, float x, float y) {
+    public RedBird(World world, float x, float y) {
         super(100,50);
 
         BodyDef bodyDef = new BodyDef();
