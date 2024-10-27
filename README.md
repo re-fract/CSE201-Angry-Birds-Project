@@ -36,14 +36,9 @@ For example, `core:clean` removes `build` folder only from the `core` project.
 ## 1. Clone the repository:
 git clone https://github.com/re-fract/CSE201-Angry-Birds-Project.git
 
-## 2. Navigate to the project directory:
-cd CSE201-Angry-Birds-Project
-
-## 3. Install dependencies:
-./gradlew clean build
-
 # Running the Game
 ## Run the desktop version:
 Open your IDE (e.g., IntelliJ IDEA).
-Navigate to desktop/src/com/yourname/angrybirds/Lwjgl3Launcher.java.
-Right-click on Lwjgl3Launcher.java and select "Run".
+open the project CSE201-Angry-Birds-Project.git in your IDE
+Navigate to lwjgl3->src->main->java->com.game.angrybirds then run the file Lwjgl3Launcher.java
+
