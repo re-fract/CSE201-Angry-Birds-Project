@@ -39,6 +39,6 @@ git clone https://github.com/re-fract/CSE201-Angry-Birds-Project.git
 # Running the Game
 ## Run the desktop version:
 Open your IDE (e.g., IntelliJ IDEA).
-open the project CSE201-Angry-Birds-Project.git in your IDE
+open the project CSE201-Angry-Birds-Project in your IDE
 Navigate to lwjgl3->src->main->java->com.game.angrybirds then run the file Lwjgl3Launcher.java
 
