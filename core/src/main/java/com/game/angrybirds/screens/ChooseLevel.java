@@ -28,8 +28,8 @@ public class ChooseLevel implements Screen, InputProcessor {
         level2Btn = new Texture("level2Btn.png");
         num1 = new Texture("one.png");
         num2 = new Texture("two.png");
-        level1BtnBounds = new Rectangle(227,135,350,450);
-        level2BtnBounds = new Rectangle(757,135,350,450);
+        level1BtnBounds = new Rectangle(227,135,300,450);
+        level2BtnBounds = new Rectangle(757,135,300,450);
         touchPos = new Vector3();
 
         Gdx.input.setInputProcessor(this);
@@ -49,8 +49,8 @@ public class ChooseLevel implements Screen, InputProcessor {
         game.getBatch().draw(background,0,0,1280,720);
         game.getBatch().draw(level1Btn,level1BtnBounds.x,level1BtnBounds.y,level1BtnBounds.width,level1BtnBounds.height);
         game.getBatch().draw(num1,310,300,128,128);
-        game.getBatch().draw(level2Btn,757,135,300,450);
-        game.getBatch().draw(num2,level2BtnBounds.x,level2BtnBounds.y,level2BtnBounds.width,level2BtnBounds.height);
+        game.getBatch().draw(level2Btn,level2BtnBounds.x,level2BtnBounds.y,level2BtnBounds.width,level2BtnBounds.height);
+        game.getBatch().draw(num2,850,300,128,128);
         game.getBatch().end();
     }
 

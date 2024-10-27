@@ -129,6 +129,7 @@ public class Level1_Screen extends InputAdapter implements Screen {
         // Check if pause button is clicked
         if (pauseBtnBounds.contains(touchPoint.x, touchPoint.y)) {
             game.setScreen(new PauseScreen(game,this));
+            return true;
         }
 
         return true;

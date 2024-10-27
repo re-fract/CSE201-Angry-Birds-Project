@@ -25,8 +25,8 @@ public class LevelCompleted extends InputAdapter implements Screen  {
         menu = new Texture("menuBtn.png");
         exit = new Texture("exit2.png");
 
-        menuBtnBounds = new Rectangle(550, 90, 100, 100);
-        exitBtnBounds = new Rectangle(750, 90, 100, 100);
+        menuBtnBounds = new Rectangle(450, 90, 100, 100);
+        exitBtnBounds = new Rectangle(650, 90, 100, 100);
 
         touchPoint = new Vector3();
 
@@ -49,7 +49,7 @@ public class LevelCompleted extends InputAdapter implements Screen  {
 
         game.getBatch().draw(level_comp_log, 0, 0, 1280, 720);
         game.getBatch().draw(menu,menuBtnBounds.x,menuBtnBounds.y,menuBtnBounds.width,menuBtnBounds.height);
-        game.getBatch().draw(exit, menuBtnBounds.x, menuBtnBounds.y, menuBtnBounds.width, menuBtnBounds.height);
+        game.getBatch().draw(exit, exitBtnBounds.x, exitBtnBounds.y, exitBtnBounds.width, exitBtnBounds.height);
         game.getBatch().end();
     }
 

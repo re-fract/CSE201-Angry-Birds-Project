@@ -110,7 +110,7 @@ public class GameOver implements Screen, InputProcessor {
         game.getCamera().unproject(touchPos);
 
         if(retryBtnBounds.contains(touchPos.x, touchPos.y)){
-//            game.setScreen(new);
+            game.setScreen(new Level1_Screen(game));
             return true;
         }
 
