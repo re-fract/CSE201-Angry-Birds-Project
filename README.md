@@ -1,7 +1,7 @@
 # AngryBirdsGame
 
 # Project Setup
-## 1. Clone the repository:
+# Clone the repository:
 git clone https://github.com/re-fract/CSE201-Angry-Birds-Project.git
 
 # Running the Game
