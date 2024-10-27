@@ -26,9 +26,9 @@ public class GameOver implements Screen, InputProcessor {
         retryBtn = new Texture("retry.png");
         exitBtn = new Texture("exit3.png");
 
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("Montserrat-SemiBold.otf"));
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("LuckiestGuy-Regular.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 50;
+        parameter.size = 60;
         parameter.borderWidth = 2;
         parameter.color = Color.WHITE;
         parameter.borderColor = Color.BLACK;
@@ -36,8 +36,8 @@ public class GameOver implements Screen, InputProcessor {
         font = generator.generateFont(parameter);
         generator.dispose();
 
-        retryBtnBounds = new Rectangle(400,150,200,100);
-        exitBtnBounds = new Rectangle(700,150,200,100);
+        retryBtnBounds = new Rectangle(400,170,200,100);
+        exitBtnBounds = new Rectangle(700,170,200,100);
         touchPos = new Vector3();
 
         Gdx.input.setInputProcessor(this);
@@ -51,11 +51,11 @@ public class GameOver implements Screen, InputProcessor {
 
     @Override
     public void render(float v) {
-        Gdx.gl.glClearColor(0.047f, 0.322f, 0.118f, 1);
+        Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         game.getBatch().begin();
-        font.draw(game.getBatch(),"LEVEL FAILED!",470,600);
-        game.getBatch().draw(pigLaugh,430,300,502,250);
+        font.draw(game.getBatch(),"LEVEL FAILED!",465,600);
+        game.getBatch().draw(pigLaugh,400,300,502,250);
         game.getBatch().draw(retryBtn,retryBtnBounds.x,retryBtnBounds.y,retryBtnBounds.width,retryBtnBounds.height);
         game.getBatch().draw(exitBtn,exitBtnBounds.x,exitBtnBounds.y,exitBtnBounds.width,exitBtnBounds.height);
         game.getBatch().end();
