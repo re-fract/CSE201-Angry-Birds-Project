@@ -32,18 +32,18 @@ Useful Gradle tasks and flags:
 Note that most tasks that are not specific to a single project can be run with `name:` prefix, where the `name` should be replaced with the ID of a specific project.
 For example, `core:clean` removes `build` folder only from the `core` project.
 
-#Project Setup
-##1. Clone the repository:
+# Project Setup
+## 1. Clone the repository:
 git clone https://github.com/re-fract/CSE201-Angry-Birds-Project.git
 
-##2. Navigate to the project directory:
+## 2. Navigate to the project directory:
 cd CSE201-Angry-Birds-Project
 
-##3. Install dependencies:
+## 3. Install dependencies:
 ./gradlew clean build
 
-#Running the Game
-##Run the desktop version:
+# Running the Game
+## Run the desktop version:
 Open your IDE (e.g., IntelliJ IDEA).
 Navigate to desktop/src/com/yourname/angrybirds/Lwjgl3Launcher.java.
 Right-click on Lwjgl3Launcher.java and select "Run".
