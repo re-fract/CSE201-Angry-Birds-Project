@@ -36,8 +36,8 @@ public class GameOver implements Screen, InputProcessor {
         font = generator.generateFont(parameter);
         generator.dispose();
 
-        retryBtnBounds = new Rectangle();
-        exitBtnBounds = new Rectangle();
+        retryBtnBounds = new Rectangle(400,150,200,100);
+        exitBtnBounds = new Rectangle(700,150,200,100);
         touchPos = new Vector3();
 
         Gdx.input.setInputProcessor(this);
@@ -56,8 +56,8 @@ public class GameOver implements Screen, InputProcessor {
         game.getBatch().begin();
         font.draw(game.getBatch(),"LEVEL FAILED!",470,600);
         game.getBatch().draw(pigLaugh,430,300,502,250);
-        game.getBatch().draw(retryBtn,400,150,200,100);
-        game.getBatch().draw(exitBtn,700,150,200,100);
+        game.getBatch().draw(retryBtn,retryBtnBounds.x,retryBtnBounds.y,retryBtnBounds.width,retryBtnBounds.height);
+        game.getBatch().draw(exitBtn,exitBtnBounds.x,exitBtnBounds.y,exitBtnBounds.width,exitBtnBounds.height);
         game.getBatch().end();
     }
 

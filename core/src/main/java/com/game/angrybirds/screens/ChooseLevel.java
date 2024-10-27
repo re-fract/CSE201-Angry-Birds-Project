@@ -47,10 +47,10 @@ public class ChooseLevel implements Screen, InputProcessor {
 
         game.getBatch().begin();
         game.getBatch().draw(background,0,0,1280,720);
-        game.getBatch().draw(level1Btn,227,135,300,450);
+        game.getBatch().draw(level1Btn,level1BtnBounds.x,level1BtnBounds.y,level1BtnBounds.width,level1BtnBounds.height);
         game.getBatch().draw(num1,310,300,128,128);
         game.getBatch().draw(level2Btn,757,135,300,450);
-        game.getBatch().draw(num2,850,300,128,128);
+        game.getBatch().draw(num2,level2BtnBounds.x,level2BtnBounds.y,level2BtnBounds.width,level2BtnBounds.height);
         game.getBatch().end();
     }
 

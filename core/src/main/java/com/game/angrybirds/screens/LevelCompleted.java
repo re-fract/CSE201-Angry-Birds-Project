@@ -36,7 +36,7 @@ public class LevelCompleted extends InputAdapter implements Screen  {
 
     @Override
     public void show() {
-        Gdx.input.setInputProcessor(this);
+
     }
 
     @Override
@@ -48,8 +48,8 @@ public class LevelCompleted extends InputAdapter implements Screen  {
         game.getBatch().begin();
 
         game.getBatch().draw(level_comp_log, 0, 0, 1280, 720);
-        game.getBatch().draw(menu,550,90,100,100);
-        game.getBatch().draw(exit, 750, 90, 100, 100);
+        game.getBatch().draw(menu,menuBtnBounds.x,menuBtnBounds.y,menuBtnBounds.width,menuBtnBounds.height);
+        game.getBatch().draw(exit, menuBtnBounds.x, menuBtnBounds.y, menuBtnBounds.width, menuBtnBounds.height);
         game.getBatch().end();
     }
 
@@ -79,13 +79,10 @@ public class LevelCompleted extends InputAdapter implements Screen  {
         game.getCamera().unproject(touchPoint.set(screenX, screenY, 0));
 
         if (menuBtnBounds.contains(touchPoint.x, touchPoint.y)) {
-
             game.setScreen(new Homescreen(game));
         }
 
-
         if (exitBtnBounds.contains(touchPoint.x, touchPoint.y)) {
-
             Gdx.app.exit();
         }
         return true;

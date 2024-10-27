@@ -59,8 +59,8 @@ public class PauseScreen implements Screen, InputProcessor {
 
         game.getBatch().begin();
         font.draw(game.getBatch(),"PAUSED!",490,450);
-        game.getBatch().draw(resumeBtn,500,250,120,120);
-        game.getBatch().draw(exitBtn,700,250,120,120);
+        game.getBatch().draw(resumeBtn,resumeBtnBounds.x,resumeBtnBounds.y,resumeBtnBounds.width,resumeBtnBounds.height);
+        game.getBatch().draw(exitBtn,resumeBtnBounds.x,resumeBtnBounds.y,resumeBtnBounds.width,resumeBtnBounds.height);
         game.getBatch().end();
     }
 

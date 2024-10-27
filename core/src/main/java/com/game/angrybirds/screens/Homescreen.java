@@ -41,12 +41,11 @@ public class Homescreen implements Screen, InputProcessor {
     public void render(float delta) {
         Gdx.gl.glClearColor(1f,1f,1f,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-//        float xOffset = (1560-1280)/2f;
 
         game.getBatch().begin();
         game.getBatch().draw(background,0,0,1280,720);
-        game.getBatch().draw(playBtn,520,250,250,125);
-        game.getBatch().draw(exitBtn,520,150,250,125);
+        game.getBatch().draw(playBtn,playBtnBounds.x,playBtnBounds.y,playBtnBounds.width,playBtnBounds.height);
+        game.getBatch().draw(exitBtn,exitBtnBounds.x,exitBtnBounds.y,exitBtnBounds.width,exitBtnBounds.height);
         game.getBatch().end();
     }
 
