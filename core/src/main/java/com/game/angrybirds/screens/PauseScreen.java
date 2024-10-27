@@ -14,19 +14,17 @@ import com.game.angrybirds.Main;
 
 public class PauseScreen implements Screen, InputProcessor {
     private final Main game;
-    private Texture background;
+    private final Screen currentScreen;
     private Texture resumeBtn;
     private Texture exitBtn;
     private BitmapFont font;
     private Rectangle resumeBtnBounds;
     private Rectangle exitBtnBounds;
     private Vector3 touchPos;
-    private int level;
 
-    public PauseScreen(Main game, String bg, int level) {
+    public PauseScreen(Main game, Screen currentScreen) {
         this.game = game;
-        this.level = level;
-        background = new Texture(bg);
+        this.currentScreen = currentScreen;
         resumeBtn = new Texture("resume.png");
         exitBtn = new Texture("exit2.png");
 
@@ -56,8 +54,10 @@ public class PauseScreen implements Screen, InputProcessor {
     public void render(float v) {
         Gdx.gl.glClearColor(1f,1f,1f,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        currentScreen.render(v);
+
         game.getBatch().begin();
-        game.getBatch().draw(background,0,0,1280,720);
         font.draw(game.getBatch(),"PAUSED!",490,450);
         game.getBatch().draw(resumeBtn,500,250,120,120);
         game.getBatch().draw(exitBtn,700,250,120,120);
@@ -86,9 +86,9 @@ public class PauseScreen implements Screen, InputProcessor {
 
     @Override
     public void dispose() {
-        background.dispose();
         resumeBtn.dispose();
         exitBtn.dispose();
+        font.dispose();
     }
 
     @Override
@@ -112,12 +112,7 @@ public class PauseScreen implements Screen, InputProcessor {
         game.getCamera().unproject(touchPos);
 
         if(resumeBtnBounds.contains(touchPos.x, touchPos.y)){
-            if(level == 1){
-                game.setScreen(new Level1_Screen(game));
-            }
-            else if(level == 2){
-//                game.setScreen();
-            }
+            game.setScreen(currentScreen);
             return true;
         }
 
