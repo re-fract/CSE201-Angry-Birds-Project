@@ -62,7 +62,7 @@ public class Level1_Screen extends InputAdapter implements Screen {
         slingShotStartPoint = new Vector2();
         shapeRenderer = new ShapeRenderer();
         touchPoint = new Vector3();
-        pauseBtnBounds = new Rectangle(1220, 660, 50, 50);
+        pauseBtnBounds = new Rectangle(1220/SCALE, 660/SCALE, 50/SCALE, 50/SCALE);
     }
 
     @Override
@@ -92,7 +92,7 @@ public class Level1_Screen extends InputAdapter implements Screen {
         blocks.add(new WoodBlock(world, 900, 105));
         blocks.add(new WoodBlock(world, 1000, 105));
         blocks.add(new WoodBlock(world, 850, 144));
-        blocks.add(new WoodBlock(world, 1050, 144));
+        blocks.add(new WoodBlock(world, 1020, 144));
         blocks.add(new WoodBlock(world, 900, 190));
         blocks.add(new WoodBlock(world, 1000, 190));
 
@@ -143,6 +143,9 @@ public class Level1_Screen extends InputAdapter implements Screen {
             pig.getSprite().draw(game.getBatch());
         }
 
+        game.getBatch().draw(pauseBtnTexture, pauseBtnBounds.x, pauseBtnBounds.y, pauseBtnBounds.width, pauseBtnBounds.height);
+        game.getBatch().end();
+
         if (joint != null) {
             shapeRenderer.setProjectionMatrix(camera.combined);
             shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
@@ -152,9 +155,6 @@ public class Level1_Screen extends InputAdapter implements Screen {
             shapeRenderer.line(slingshotOrigin.x, slingshotOrigin.y, mousePosition.x, mousePosition.y);
             shapeRenderer.end();
         }
-
-        game.getBatch().draw(pauseBtnTexture, pauseBtnBounds.x, pauseBtnBounds.y, pauseBtnBounds.width, pauseBtnBounds.height);
-        game.getBatch().end();
     }
 
     @Override
@@ -173,6 +173,7 @@ public class Level1_Screen extends InputAdapter implements Screen {
     public void dispose() {
         background.dispose();
         slingshot.dispose();
+        pauseBtnTexture.dispose();
         redBird.dispose();
         for (ParentBlock block : blocks) {
             block.dispose();
@@ -204,6 +205,11 @@ public class Level1_Screen extends InputAdapter implements Screen {
             slingShotStartPoint.set(touchPoint.x, touchPoint.y);
         }
 
+        if(pauseBtnBounds.contains(touchPoint.x, touchPoint.y)){
+            new PauseScreen(game,this);
+            return true;
+        }
+
         return true;
     }
 
@@ -227,7 +233,7 @@ public class Level1_Screen extends InputAdapter implements Screen {
 
         if (dragDirection.len() > 0) {
             dragDirection.nor();
-            float impulseStrength = dragDirection.len() * 40f * SCALE;
+            float impulseStrength = dragDirection.len() * 60f * SCALE;
             redBird.getBody().applyLinearImpulse(dragDirection.scl(-impulseStrength), redBird.getBody().getWorldCenter(), true);
         }
 
