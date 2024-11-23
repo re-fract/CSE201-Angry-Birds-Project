@@ -5,15 +5,14 @@ import com.badlogic.gdx.physics.box2d.*;
 
 public class YellowBird extends ParentBird{
     private Body body;
-    private PolygonShape shape;
     public YellowBird(World world, float x, float y) {
-        super(world,200,100,"yellowbird.png",x,y,70,70);
+        super(world,200,"yellowbird.png",x,y);
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(x, y);
         body = world.createBody(bodyDef);
 
-        shape = new PolygonShape();
+        PolygonShape shape = new PolygonShape();
         Vector2[] vertices = new Vector2[3];
         vertices[0] = new Vector2(0, 0);
         vertices[1] = new Vector2(1, 0);
