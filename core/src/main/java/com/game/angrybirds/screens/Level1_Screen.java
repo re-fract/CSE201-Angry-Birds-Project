@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.*;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
@@ -104,17 +103,17 @@ public class Level1_Screen extends InputAdapter implements Screen {
        world.setContactListener(new ContactListener() {
     @Override
     public void beginContact(Contact contact) {
-    
+
     }
 
     @Override
     public void endContact(Contact contact) {
-       
+
     }
 
     @Override
     public void preSolve(Contact contact, Manifold oldManifold) {
-     
+
     }
 
    @Override
@@ -125,7 +124,7 @@ public void postSolve(Contact contact, ContactImpulse impulse) {
     Body bodyA = fixtureA.getBody();
     Body bodyB = fixtureB.getBody();
 
-    
+
     float totalImpulse = 0f;
     for (float normalImpulse : impulse.getNormalImpulses()) {
         totalImpulse += normalImpulse;
@@ -138,11 +137,12 @@ public void postSolve(Contact contact, ContactImpulse impulse) {
             block.takeDamage(damage);
 
             if (block.isDestroyed()) {
+                block.markForDestruction();
                 Gdx.app.log("Collision", "Block destroyed!");
             } else {
                 Gdx.app.log("Collision", "Block health: " + block.getHealth());
             }
-            return; 
+            return;
         }
     }
 
@@ -153,18 +153,19 @@ public void postSolve(Contact contact, ContactImpulse impulse) {
             pig.takeDamage(damage);
 
             if (pig.isDestroyed()) {
+                pig.markForDestruction();
                 Gdx.app.log("Collision", "Pig destroyed!");
             } else {
                 Gdx.app.log("Collision", "Pig health: " + pig.getHealth());
             }
-            return; 
+            return;
         }
     }
 }
 
 });
 
-        
+
     }
 
     @Override
@@ -188,24 +189,45 @@ public void postSolve(Contact contact, ContactImpulse impulse) {
 
         redBird.getSprite().draw(game.getBatch());
 
-        for (ParentBlock block : blocks) {
-            block.getSprite().setPosition(
-              block.getBody().getPosition().x - block.getSprite().getWidth()/2,
-              block.getBody().getPosition().y - block.getSprite().getHeight()/2
-            );
-            block.getSprite().setRotation(MathUtils.radiansToDegrees * block.getBody().getAngle());
+        for (int i = 0; i < blocks.size(); i++) {
+            ParentBlock block = blocks.get(i);
 
-            block.getSprite().draw(game.getBatch());
+            if (block != null && !block.isDestroyed()) {
+                block.getSprite().setPosition(
+                    block.getBody().getPosition().x - block.getSprite().getWidth() / 2,
+                    block.getBody().getPosition().y - block.getSprite().getHeight() / 2
+                );
+                block.getSprite().setRotation(MathUtils.radiansToDegrees * block.getBody().getAngle());
+
+                block.getSprite().draw(game.getBatch());
+            }
+
+            if (block != null && block.isMarkedForDestruction()) {
+                world.destroyBody(block.getBody());
+                block.setBody(null);
+                blocks.remove(i);
+                i--;
+            }
         }
 
-        for (ParentPig pig : pigs) {
-            pig.getSprite().setPosition(
-                pig.getBody().getPosition().x - pig.getSprite().getWidth()/2,
-                pig.getBody().getPosition().y - pig.getSprite().getHeight()/2
-            );
-            pig.getSprite().setRotation(MathUtils.radiansToDegrees * pig.getBody().getAngle());
+        for (int i = 0; i < pigs.size(); i++) {
+            ParentPig pig = pigs.get(i);
+            if(pig != null && !pig.isDestroyed()) {
+                pig.getSprite().setPosition(
+                    pig.getBody().getPosition().x - pig.getSprite().getWidth() / 2,
+                    pig.getBody().getPosition().y - pig.getSprite().getHeight() / 2
+                );
+                pig.getSprite().setRotation(MathUtils.radiansToDegrees * pig.getBody().getAngle());
 
-            pig.getSprite().draw(game.getBatch());
+                pig.getSprite().draw(game.getBatch());
+            }
+
+            if(pig != null && pig.isMarkedForDestruction()){
+                world.destroyBody(pig.getBody());
+                pig.setBody(null);
+                pigs.remove(i);
+                i--;
+            }
         }
 
         game.getBatch().draw(pauseBtnTexture, pauseBtnBounds.x, pauseBtnBounds.y, pauseBtnBounds.width, pauseBtnBounds.height);

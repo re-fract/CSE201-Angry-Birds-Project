@@ -51,6 +51,10 @@ public class ParentBlock {
         shape.dispose();
     }
 
+    public void setBody(Body body) {
+        this.body = body;
+    }
+
     public int getHealth(){
         return health;
     }
