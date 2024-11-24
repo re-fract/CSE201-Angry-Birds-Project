@@ -101,68 +101,7 @@ public class Level1_Screen extends InputAdapter implements Screen {
         jointDef.collideConnected = true;
         jointDef.maxForce = 1000.0f * redBird.getBody().getMass();
 
-       world.setContactListener(new ContactListener() {
-    @Override
-    public void beginContact(Contact contact) {
-    
-    }
-
-    @Override
-    public void endContact(Contact contact) {
-       
-    }
-
-    @Override
-    public void preSolve(Contact contact, Manifold oldManifold) {
-     
-    }
-
-   @Override
-public void postSolve(Contact contact, ContactImpulse impulse) {
-    Fixture fixtureA = contact.getFixtureA();
-    Fixture fixtureB = contact.getFixtureB();
-
-    Body bodyA = fixtureA.getBody();
-    Body bodyB = fixtureB.getBody();
-
-    
-    float totalImpulse = 0f;
-    for (float normalImpulse : impulse.getNormalImpulses()) {
-        totalImpulse += normalImpulse;
-    }
-
-    // Damage the blocks based on the impulse
-    for (ParentBlock block : blocks) {
-        if (bodyA == block.getBody() || bodyB == block.getBody()) {
-            int damage = Math.max(1, (int) (totalImpulse / 10)); // Adjust divisor for scaling
-            block.takeDamage(damage);
-
-            if (block.isDestroyed()) {
-                Gdx.app.log("Collision", "Block destroyed!");
-            } else {
-                Gdx.app.log("Collision", "Block health: " + block.getHealth());
-            }
-            return; 
-        }
-    }
-
-    // Damage the pigs based on the impulse
-    for (ParentPig pig : pigs) {
-        if (bodyA == pig.getBody() || bodyB == pig.getBody()) {
-            int damage = Math.max(1, (int) (totalImpulse / 10)); // Adjust divisor for scaling
-            pig.takeDamage(damage);
-
-            if (pig.isDestroyed()) {
-                Gdx.app.log("Collision", "Pig destroyed!");
-            } else {
-                Gdx.app.log("Collision", "Pig health: " + pig.getHealth());
-            }
-            return; 
-        }
-    }
-}
-
-});
+      
 
         
     }
