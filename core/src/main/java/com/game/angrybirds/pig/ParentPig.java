@@ -13,6 +13,7 @@ public class ParentPig {
     protected World world;
     protected int health;
     private final float SCALE = 10f;
+    protected boolean markedForDestruction = false;
 
     public ParentPig(World world, String texture, int x, int y, int health) {
         this.world = world;
@@ -48,20 +49,28 @@ public class ParentPig {
         shape.dispose();
     }
 
-    public boolean isAlive() {
-        return health>0;
+    public int getHealth(){
+        return health;
     }
 
     public void takeDamage(int damage) {
         health -= damage;
-        if(health <= 0) {
-            destroy();
-        }
     }
 
-    public void destroy() {
-        world.destroyBody(body);
-        body = null;
+    public boolean isDestroyed() {
+        return health<=0;
+    }
+
+    public void markForDestruction() {
+        markedForDestruction = true;
+    }
+
+    public boolean isMarkedForDestruction() {
+        return markedForDestruction;
+    }
+
+    public void setBody(Body body) {
+        this.body = body;
     }
 
     public void dispose(){
