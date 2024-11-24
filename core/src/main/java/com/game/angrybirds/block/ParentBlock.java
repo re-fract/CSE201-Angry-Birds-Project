@@ -12,8 +12,9 @@ public class ParentBlock {
     protected World world;
     protected int health;
     protected int width;
-    private Sprite sprite;
+    protected Sprite sprite;
     protected int height;
+    protected boolean markedForDestruction;
     private final float SCALE = 10f;
 
     public ParentBlock(World world, String texture, float x, float y, int health, int width, int height) {
@@ -50,21 +51,29 @@ public class ParentBlock {
         shape.dispose();
     }
 
+    public int getHealth(){
+        return health;
+    }
+
     public void takeDamage(int damage) {
         health -= damage;
-        if(health <= 0) {
-            destroy();
-        }
+    }
+
+    public boolean isDestroyed() {
+        return health<=0;
+    }
+
+    public void markForDestruction() {
+        markedForDestruction = true;
+    }
+
+    public boolean isMarkedForDestruction() {
+        return markedForDestruction;
     }
 
     public void render(SpriteBatch batch) {
         Vector2 position = body.getPosition();
         batch.draw(texture, position.x, position.y, width, height);
-    }
-
-    public void destroy() {
-        world.destroyBody(body);
-        body = null;
     }
 
     public void dispose() {
