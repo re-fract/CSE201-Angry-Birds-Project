@@ -101,53 +101,83 @@ public class Level1_Screen extends InputAdapter implements Screen {
         jointDef.collideConnected = true;
         jointDef.maxForce = 1000.0f * redBird.getBody().getMass();
 
-        world.setContactListener(new ContactListener() {
-            @Override
-            public void beginContact(Contact contact) {
+       world.setContactListener(new ContactListener() {
+    @Override
+    public void beginContact(Contact contact) {
+        Fixture fixtureA = contact.getFixtureA();
+        Fixture fixtureB = contact.getFixtureB();
 
-            }
+        Body bodyA = fixtureA.getBody();
+        Body bodyB = fixtureB.getBody();
 
-            @Override
-            public void endContact(Contact contact) {
-            }
-
-            @Override
-            public void preSolve(Contact contact, Manifold oldManifold) {
-            }
-
-            @Override
-            public void postSolve(Contact contact,ContactImpulse impulse) {
-                Fixture fixtureA = contact.getFixtureA();
-                Fixture fixtureB = contact.getFixtureB();
-
-                // Make sure gameBlock is not null before accessing it
-                if (gameBlock != null) {
-                    // Check if the ball collided with the block
-                    Body bodyA = fixtureA.getBody();
-                    Body bodyB = fixtureB.getBody();
-
-                    if ((bodyA == ball && bodyB == gameBlock.getBody()) || (bodyB == ball && bodyA == gameBlock.getBody())) {
-                        // Reduce block health
-
-                        float totalImpulse = 0f;
-                        for (float normalImpulse : impulse.getNormalImpulses()) {
-                            totalImpulse += normalImpulse;
-                        }
-
-                        // Reduce health points based on the impact force
-                        int damage = Math.max(1, (int) (totalImpulse / 10)); // Adjust the divisor (10) to scale the damage
-                        gameBlock.takeDamage(damage);
-
-                        if (gameBlock.isDestroyed()) {
-                            gameBlock.markForDestruction();
-                            Gdx.app.log("Block", "Block marked for destruction!");
-                        } else {
-                            Gdx.app.log("Block", "Block health: " + gameBlock.getHealth());
-                        }
-                    }
+        // Check for collision with pigs
+        for (ParentPig pig : pigs) {
+            if (bodyA == pig.getBody() || bodyB == pig.getBody()) {
+                pig.takeDamage(50); // Example damage value
+                Gdx.app.log("Collision", "Bird hit a pig! Pig health: " + pig.getHealth());
+                
+                if (pig.isDestroyed()) {
+                    Gdx.app.log("Collision", "Pig destroyed!");
                 }
+                return;
             }
-        });
+        }
+
+        // Check for collision with blocks
+        for (ParentBlock block : blocks) {
+            if (bodyA == block.getBody() || bodyB == block.getBody()) {
+                block.takeDamage(20); // Example damage value
+                Gdx.app.log("Collision", "Bird hit a block! Block health: " + block.getHealth());
+                
+                if (block.isDestroyed()) {
+                    Gdx.app.log("Collision", "Block destroyed!");
+                }
+                return;
+            }
+        }
+    }
+
+    @Override
+    public void endContact(Contact contact) {
+        // Optional: Handle when the collision ends, if needed
+    }
+
+    @Override
+    public void preSolve(Contact contact, Manifold oldManifold) {
+        // Optional: Handle contact before the solver processes it
+    }
+
+    @Override
+    public void postSolve(Contact contact, ContactImpulse impulse) {
+        // Process the collision impulse for more detailed damage calculation
+        Fixture fixtureA = contact.getFixtureA();
+        Fixture fixtureB = contact.getFixtureB();
+
+        Body bodyA = fixtureA.getBody();
+        Body bodyB = fixtureB.getBody();
+
+        for (ParentBlock block : blocks) {
+            if (bodyA == block.getBody() || bodyB == block.getBody()) {
+                float totalImpulse = 0f;
+                for (float normalImpulse : impulse.getNormalImpulses()) {
+                    totalImpulse += normalImpulse;
+                }
+
+                // Damage the block based on the total impulse
+                int damage = Math.max(1, (int) (totalImpulse / 10)); // Adjust the divisor (10) for scaling
+                block.takeDamage(damage);
+
+                if (block.isDestroyed()) {
+                    Gdx.app.log("Collision", "Block destroyed!");
+                } else {
+                    Gdx.app.log("Collision", "Block health: " + block.getHealth());
+                }
+                return;
+            }
+        }
+    }
+});
+
         
     }
 
