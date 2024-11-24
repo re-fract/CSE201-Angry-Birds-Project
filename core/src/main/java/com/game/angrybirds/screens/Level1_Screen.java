@@ -104,78 +104,64 @@ public class Level1_Screen extends InputAdapter implements Screen {
        world.setContactListener(new ContactListener() {
     @Override
     public void beginContact(Contact contact) {
-        Fixture fixtureA = contact.getFixtureA();
-        Fixture fixtureB = contact.getFixtureB();
-
-        Body bodyA = fixtureA.getBody();
-        Body bodyB = fixtureB.getBody();
-
-        // Check for collision with pigs
-        for (ParentPig pig : pigs) {
-            if (bodyA == pig.getBody() || bodyB == pig.getBody()) {
-                pig.takeDamage(50); // Example damage value
-                Gdx.app.log("Collision", "Bird hit a pig! Pig health: " + pig.getHealth());
-                
-                if (pig.isDestroyed()) {
-                    Gdx.app.log("Collision", "Pig destroyed!");
-                }
-                return;
-            }
-        }
-
-        // Check for collision with blocks
-        for (ParentBlock block : blocks) {
-            if (bodyA == block.getBody() || bodyB == block.getBody()) {
-                block.takeDamage(20); // Example damage value
-                Gdx.app.log("Collision", "Bird hit a block! Block health: " + block.getHealth());
-                
-                if (block.isDestroyed()) {
-                    Gdx.app.log("Collision", "Block destroyed!");
-                }
-                return;
-            }
-        }
+    
     }
 
     @Override
     public void endContact(Contact contact) {
-        // Optional: Handle when the collision ends, if needed
+       
     }
 
     @Override
     public void preSolve(Contact contact, Manifold oldManifold) {
-        // Optional: Handle contact before the solver processes it
+     
     }
 
-    @Override
-    public void postSolve(Contact contact, ContactImpulse impulse) {
-        // Process the collision impulse for more detailed damage calculation
-        Fixture fixtureA = contact.getFixtureA();
-        Fixture fixtureB = contact.getFixtureB();
+   @Override
+public void postSolve(Contact contact, ContactImpulse impulse) {
+    Fixture fixtureA = contact.getFixtureA();
+    Fixture fixtureB = contact.getFixtureB();
 
-        Body bodyA = fixtureA.getBody();
-        Body bodyB = fixtureB.getBody();
+    Body bodyA = fixtureA.getBody();
+    Body bodyB = fixtureB.getBody();
 
-        for (ParentBlock block : blocks) {
-            if (bodyA == block.getBody() || bodyB == block.getBody()) {
-                float totalImpulse = 0f;
-                for (float normalImpulse : impulse.getNormalImpulses()) {
-                    totalImpulse += normalImpulse;
-                }
+    
+    float totalImpulse = 0f;
+    for (float normalImpulse : impulse.getNormalImpulses()) {
+        totalImpulse += normalImpulse;
+    }
 
-                // Damage the block based on the total impulse
-                int damage = Math.max(1, (int) (totalImpulse / 10)); // Adjust the divisor (10) for scaling
-                block.takeDamage(damage);
+    // Damage the blocks based on the impulse
+    for (ParentBlock block : blocks) {
+        if (bodyA == block.getBody() || bodyB == block.getBody()) {
+            int damage = Math.max(1, (int) (totalImpulse / 10)); // Adjust divisor for scaling
+            block.takeDamage(damage);
 
-                if (block.isDestroyed()) {
-                    Gdx.app.log("Collision", "Block destroyed!");
-                } else {
-                    Gdx.app.log("Collision", "Block health: " + block.getHealth());
-                }
-                return;
+            if (block.isDestroyed()) {
+                Gdx.app.log("Collision", "Block destroyed!");
+            } else {
+                Gdx.app.log("Collision", "Block health: " + block.getHealth());
             }
+            return; 
         }
     }
+
+    // Damage the pigs based on the impulse
+    for (ParentPig pig : pigs) {
+        if (bodyA == pig.getBody() || bodyB == pig.getBody()) {
+            int damage = Math.max(1, (int) (totalImpulse / 10)); // Adjust divisor for scaling
+            pig.takeDamage(damage);
+
+            if (pig.isDestroyed()) {
+                Gdx.app.log("Collision", "Pig destroyed!");
+            } else {
+                Gdx.app.log("Collision", "Pig health: " + pig.getHealth());
+            }
+            return; 
+        }
+    }
+}
+
 });
 
         
