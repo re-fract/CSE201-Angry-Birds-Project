@@ -39,6 +39,7 @@ public class ParentBlock {
         shape.setAsBox(width/2f/SCALE, height/2f/SCALE);
 
         FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = shape;
         fixtureDef.density = 1f;
         fixtureDef.friction = 0.2f;
         fixtureDef.restitution = 0.1f;
