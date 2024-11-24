@@ -100,6 +100,55 @@ public class Level1_Screen extends InputAdapter implements Screen {
         jointDef.bodyA = groundBody;
         jointDef.collideConnected = true;
         jointDef.maxForce = 1000.0f * redBird.getBody().getMass();
+
+        world.setContactListener(new ContactListener() {
+            @Override
+            public void beginContact(Contact contact) {
+
+            }
+
+            @Override
+            public void endContact(Contact contact) {
+            }
+
+            @Override
+            public void preSolve(Contact contact, Manifold oldManifold) {
+            }
+
+            @Override
+            public void postSolve(Contact contact,ContactImpulse impulse) {
+                Fixture fixtureA = contact.getFixtureA();
+                Fixture fixtureB = contact.getFixtureB();
+
+                // Make sure gameBlock is not null before accessing it
+                if (gameBlock != null) {
+                    // Check if the ball collided with the block
+                    Body bodyA = fixtureA.getBody();
+                    Body bodyB = fixtureB.getBody();
+
+                    if ((bodyA == ball && bodyB == gameBlock.getBody()) || (bodyB == ball && bodyA == gameBlock.getBody())) {
+                        // Reduce block health
+
+                        float totalImpulse = 0f;
+                        for (float normalImpulse : impulse.getNormalImpulses()) {
+                            totalImpulse += normalImpulse;
+                        }
+
+                        // Reduce health points based on the impact force
+                        int damage = Math.max(1, (int) (totalImpulse / 10)); // Adjust the divisor (10) to scale the damage
+                        gameBlock.takeDamage(damage);
+
+                        if (gameBlock.isDestroyed()) {
+                            gameBlock.markForDestruction();
+                            Gdx.app.log("Block", "Block marked for destruction!");
+                        } else {
+                            Gdx.app.log("Block", "Block health: " + gameBlock.getHealth());
+                        }
+                    }
+                }
+            }
+        });
+        
     }
 
     @Override
