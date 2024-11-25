@@ -126,10 +126,9 @@ public class Level1_Screen extends InputAdapter implements Screen {
                     totalImpulse += normalImpulse;
                 }
 
-
                 for (ParentBlock block : blocks) {
                     if (bodyA == block.getBody() || bodyB == block.getBody()) {
-                        int damage = Math.max(1, (int) (totalImpulse / 10));
+                        int damage = Math.max(1, (int) (totalImpulse / SCALE));
                         block.takeDamage(damage);
 
                         if (block.isDestroyed()) {
@@ -142,10 +141,9 @@ public class Level1_Screen extends InputAdapter implements Screen {
                     }
                 }
 
-                // Damage the pigs based on the impulse
                 for (ParentPig pig : pigs) {
                     if (bodyA == pig.getBody() || bodyB == pig.getBody()) {
-                        int damage = Math.max(1, (int) (totalImpulse / 10));
+                        int damage = Math.max(1, (int) (totalImpulse / SCALE));
                         pig.takeDamage(damage);
 
                         if (pig.isDestroyed()) {
@@ -161,7 +159,7 @@ public class Level1_Screen extends InputAdapter implements Screen {
         });
     }
 
-        @Override
+    @Override
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -322,7 +320,6 @@ public class Level1_Screen extends InputAdapter implements Screen {
 
         return true;
     }
-
 }
 
 

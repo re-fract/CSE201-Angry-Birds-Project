@@ -44,6 +44,7 @@ abstract class ParentBird {
         fixtureDef.restitution = 0.6f;
 
         body.createFixture(fixtureDef);
+        shape.dispose();
     }
 
     public Body getBody() {
