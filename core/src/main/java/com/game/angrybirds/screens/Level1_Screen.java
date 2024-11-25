@@ -20,7 +20,7 @@ import com.game.angrybirds.pig.*;
 
 import java.util.ArrayList;
 
-public class Level0_Screen extends InputAdapter implements Screen {
+public class Level1_Screen extends InputAdapter implements Screen {
     private final Main game;
     private Texture background;
     private ArrayList<ParentPig> pigs;
@@ -48,7 +48,7 @@ public class Level0_Screen extends InputAdapter implements Screen {
     private Box2DDebugRenderer debugRenderer;
     private final ArrayList<Body> bodiesToDestroy;
 
-    public Level0_Screen(Main game) {
+    public Level1_Screen(Main game) {
         this.game = game;
         this.bodiesToDestroy =new ArrayList<>();
 
