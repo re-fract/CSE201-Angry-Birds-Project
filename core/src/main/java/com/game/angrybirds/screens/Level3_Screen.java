@@ -79,6 +79,8 @@ public class Level3_Screen extends InputAdapter implements Screen {
         camera.update();
         debugRenderer = new Box2DDebugRenderer();
 
+        createWalls();
+
         BodyDef groundBodyDef = new BodyDef();
         groundBodyDef.type = BodyDef.BodyType.StaticBody;
         Body groundBody = world.createBody(groundBodyDef);
@@ -381,6 +383,31 @@ public class Level3_Screen extends InputAdapter implements Screen {
         joint = null;
 
         return true;
+    }
+
+    private void createWalls(){
+        Body body;
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        body = world.createBody(bodyDef);
+
+        ChainShape left_shape = new ChainShape();
+        Vector2[] left_vert = new Vector2[2];
+        left_vert[0] = new Vector2(0, 0);
+        left_vert[1] = new Vector2(0, (Gdx.graphics.getHeight()-1)/SCALE);
+        left_shape.createChain(left_vert);
+
+        ChainShape right_shape = new ChainShape();
+        Vector2[] right_vert = new Vector2[2];
+        right_vert[0] = new Vector2((Gdx.graphics.getWidth()-1)/SCALE,0);
+        right_vert[1] = new Vector2((Gdx.graphics.getWidth()-1)/SCALE, (Gdx.graphics.getHeight()-1)/SCALE);
+        right_shape.createChain(right_vert);
+
+        body.createFixture(left_shape,1);
+        body.createFixture(right_shape,1);
+
+        left_shape.dispose();
+        right_shape.dispose();
     }
 
 }
