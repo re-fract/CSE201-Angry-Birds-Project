@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 
-abstract class ParentBird {
+public abstract class ParentBird {
     protected int Health_point_Dec;
     protected World world;
     protected Texture texture;
@@ -25,7 +25,7 @@ abstract class ParentBird {
 
     public void createBody(float x, float y){
         BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.type = BodyDef.BodyType.StaticBody;
         bodyDef.position.set(x/SCALE, y/SCALE);
 
         body = world.createBody(bodyDef);
@@ -40,8 +40,9 @@ abstract class ParentBird {
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
         fixtureDef.density = 1f;
-        fixtureDef.friction = 0.5f;
+        fixtureDef.friction = 1f;
         fixtureDef.restitution = 0.6f;
+        body.setUserData(this);
 
         body.createFixture(fixtureDef);
         shape.dispose();

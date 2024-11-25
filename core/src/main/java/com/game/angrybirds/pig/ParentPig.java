@@ -31,12 +31,11 @@ public class ParentPig {
     }
 
     public void createBody(int x, int y) {
-        //Defining body and its attributes
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(x/SCALE, y/SCALE);
 
-        body = world.createBody(bodyDef); //Create body in the world
+        body = world.createBody(bodyDef);
 
 //        float ballRadius = 2.5f;
         sprite.setSize(2*radius,2*radius);
@@ -69,20 +68,16 @@ public class ParentPig {
 
     public void checkFall() {
         float currentYPos = body.getPosition().y;
-        if (currentYPos < initialYPos - fallThreshold) {
+        if (!hasFallen && currentYPos < initialYPos - fallThreshold) {
             takeDamage(1);
             initialYPos = currentYPos;
-//            hasFallen = true;
+            hasFallen = true;
             System.out.println("Pig has fallen more than " + fallThreshold + " meters and took 1 damage. Health left: " + health);
         }
     }
 
     public boolean isDestroyed() {
         return health<=0;
-    }
-
-    public void markForDestruction() {
-        markForDestruction = true;
     }
 
     public boolean isMarkedForDestruction() {

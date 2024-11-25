@@ -14,10 +14,13 @@ public class ChooseLevel implements Screen, InputProcessor {
     private Texture background;
     private Texture level1Btn;
     private Texture level2Btn;
+    private Texture level3Btn;
     private Texture num1;
     private Texture num2;
+    private Texture num3;
     private Rectangle level1BtnBounds;
     private Rectangle level2BtnBounds;
+    private Rectangle level3BtnBounds;
     private Vector3 touchPos;
 
 
@@ -26,10 +29,13 @@ public class ChooseLevel implements Screen, InputProcessor {
         background = new Texture("home.png");
         level1Btn = new Texture("level1Btn.png");
         level2Btn = new Texture("level2Btn.png");
+        level3Btn = new Texture("level3Btn.png");
         num1 = new Texture("one.png");
         num2 = new Texture("two.png");
-        level1BtnBounds = new Rectangle(227,135,300,450);
-        level2BtnBounds = new Rectangle(757,135,300,450);
+        num3 = new Texture("three.png");
+        level1BtnBounds = new Rectangle(95,135,300,450);
+        level2BtnBounds = new Rectangle(490,135,300,450);
+        level3BtnBounds = new Rectangle(885,135,300,450);
         touchPos = new Vector3();
 
         Gdx.input.setInputProcessor(this);
@@ -48,9 +54,11 @@ public class ChooseLevel implements Screen, InputProcessor {
         game.getBatch().begin();
         game.getBatch().draw(background,0,0,1280,720);
         game.getBatch().draw(level1Btn,level1BtnBounds.x,level1BtnBounds.y,level1BtnBounds.width,level1BtnBounds.height);
-        game.getBatch().draw(num1,310,300,128,128);
+        game.getBatch().draw(num1,181,296,128,128);
         game.getBatch().draw(level2Btn,level2BtnBounds.x,level2BtnBounds.y,level2BtnBounds.width,level2BtnBounds.height);
-        game.getBatch().draw(num2,850,300,128,128);
+        game.getBatch().draw(num2,576,296,128,128);
+        game.getBatch().draw(level3Btn,level3BtnBounds.x,level3BtnBounds.y,level3BtnBounds.width,level3BtnBounds.height);
+        game.getBatch().draw(num3,971,296,128,128);
         game.getBatch().end();
     }
 
@@ -79,6 +87,7 @@ public class ChooseLevel implements Screen, InputProcessor {
         background.dispose();
         level1Btn.dispose();
         level2Btn.dispose();
+        level3Btn.dispose();
     }
 
     @Override
@@ -107,8 +116,13 @@ public class ChooseLevel implements Screen, InputProcessor {
             return true;
         }
 
-        if(level2BtnBounds.contains(touchPos.x, touchPos.y)){
+        else if(level2BtnBounds.contains(touchPos.x, touchPos.y)){
             game.setScreen(new Level2_Screen(game));
+            return true;
+        }
+
+        else if(level3BtnBounds.contains(touchPos.x, touchPos.y)){
+            game.setScreen(new Level3_Screen(game));
             return true;
         }
 

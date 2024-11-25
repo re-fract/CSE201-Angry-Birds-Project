@@ -25,12 +25,14 @@ public class Level2_Screen extends InputAdapter implements Screen {
     private Texture background;
     private ArrayList<ParentPig> pigs;
     private ArrayList<ParentBlock> blocks;
-    private RedBird redBird;
+    private ArrayList<ParentBird> birds;
+    private int currentBirdIndex;
     private Texture slingshot;
     private Texture pauseBtnTexture;
     private World world;
     private OrthographicCamera camera;
 
+    private Vector2 initialBallPosition;
     private Vector2 slingShotStartPoint;
     private ShapeRenderer shapeRenderer;
 
@@ -41,7 +43,6 @@ public class Level2_Screen extends InputAdapter implements Screen {
     private MouseJoint joint;
     private MouseJointDef jointDef;
 
-    // Rectangle bounds for detecting button clicks
     private Rectangle pauseBtnBounds;
     private Vector3 touchPoint;
 
@@ -50,10 +51,10 @@ public class Level2_Screen extends InputAdapter implements Screen {
     public Level2_Screen(Main game) {
         this.game = game;
 
-        // Load textures
-        background = new Texture("level1.png");
+        background = new Texture("level2.png");
         pigs = new ArrayList<>();
         blocks = new ArrayList<>();
+        birds = new ArrayList<>();
 
         pauseBtnTexture = new Texture("pause.png");
         slingshot = new Texture("slingshot.png");
@@ -84,7 +85,10 @@ public class Level2_Screen extends InputAdapter implements Screen {
         groundBody.createFixture(groundShape, 0);
         groundShape.dispose();
 
-        redBird = new RedBird(world, 90, 115);
+        initialBallPosition = new Vector2(155/SCALE,255/SCALE);
+        birds.add(new RedBird(world, 155, 255));
+        birds.add(new RedBird(world, 130,123));
+        birds.add(new RedBird(world, 225,123));
 
         pigs.add(new NormalPig(world, 950, 235,5,3.2f));
         pigs.add(new CrownPig(world, 950, 144,3,2.5f));
@@ -100,34 +104,36 @@ public class Level2_Screen extends InputAdapter implements Screen {
         jointDef = new MouseJointDef();
         jointDef.bodyA = groundBody;
         jointDef.collideConnected = true;
-        jointDef.maxForce = 1000.0f * redBird.getBody().getMass();
+        jointDef.maxForce = 1000.0f * birds.get(0).getBody().getMass();
 
         world.setContactListener(new ContactListener() {
             @Override
             public void beginContact(Contact contact) {
-                // Detect when the bird collides with a pig or block
                 Body bodyA = contact.getFixtureA().getBody();
                 Body bodyB = contact.getFixtureB().getBody();
 
-                if (bodyA == redBird.getBody() || bodyB == redBird.getBody()) {
-                    Body collidedBody = (bodyA == redBird.getBody()) ? bodyB : bodyA;
-                    if (collidedBody.getUserData() instanceof ParentPig) {
-                        // Calculate damage based on bird speed
-                        float speed = redBird.getBody().getLinearVelocity().len();
-                        int damage = getDamageBasedOnSpeed(speed);
-                        ParentPig pig = (ParentPig) collidedBody.getUserData();
-                        pig.takeDamage(damage);
+                if (bodyA.getUserData() instanceof ParentBird || bodyB.getUserData() instanceof ParentBird) {
+                    ParentBird currentBird = null;
+                    if (bodyA.getUserData() instanceof ParentBird) {
+                        currentBird = (ParentBird) bodyA.getUserData();
+                    } else if (bodyB.getUserData() instanceof ParentBird) {
+                        currentBird = (ParentBird) bodyB.getUserData();
+                    }
 
-                        System.out.println("Pig took " + damage + " damage. Health left: " + pig.getHealth());
-                    } else if (collidedBody.getUserData() instanceof ParentBlock) {
-                        // Calculate damage based on bird speed
-                        float speed = redBird.getBody().getLinearVelocity().len();
+                    if (currentBird != null) {
+                        float speed = currentBird.getBody().getLinearVelocity().len();
                         int damage = getDamageBasedOnSpeed(speed);
-                        ParentBlock block = (ParentBlock) collidedBody.getUserData();
-                        block.takeDamage(damage);
 
-                        // Log the health of the block after taking damage
-                        System.out.println("Block took " + damage + " damage. Health left: " + block.getHealth());
+                        if (bodyA.getUserData() instanceof ParentPig || bodyB.getUserData() instanceof ParentPig) {
+                            ParentPig pig = (bodyA.getUserData() instanceof ParentPig) ? (ParentPig) bodyA.getUserData() : (ParentPig) bodyB.getUserData();
+                            pig.takeDamage(damage);
+                            System.out.println("Pig took " + damage + " damage. Health left: " + pig.getHealth());
+                        }
+                        else if (bodyA.getUserData() instanceof ParentBlock || bodyB.getUserData() instanceof ParentBlock) {
+                            ParentBlock block = (bodyA.getUserData() instanceof ParentBlock) ? (ParentBlock) bodyA.getUserData() : (ParentBlock) bodyB.getUserData();
+                            block.takeDamage(damage);
+                            System.out.println("Block took " + damage + " damage. Health left: " + block.getHealth());
+                        }
                     }
                 }
             }
@@ -167,18 +173,30 @@ public class Level2_Screen extends InputAdapter implements Screen {
         debugRenderer.render(world, camera.combined);
 
         game.getBatch().begin();
-//        game.getBatch().draw(background,0,0,1280/SCALE,720/SCALE);
-//        game.getBatch().draw(slingshot, 100, 100, 100, 200);
+        game.getBatch().draw(background,0,0,1280/SCALE,720/SCALE);
+        game.getBatch().draw(slingshot, 100/SCALE, 100/SCALE, 100/SCALE, 200/SCALE);
 
         game.getBatch().setProjectionMatrix(camera.combined);
 
-        redBird.getSprite().setPosition(
-            redBird.getBody().getPosition().x - redBird.getSprite().getWidth() / 2,
-            redBird.getBody().getPosition().y - redBird.getSprite().getHeight() / 2
+        ParentBird currentBird = birds.get(currentBirdIndex);
+        currentBird.getSprite().setPosition(
+            currentBird.getBody().getPosition().x - currentBird.getSprite().getWidth() / 2,
+            currentBird.getBody().getPosition().y - currentBird.getSprite().getHeight() / 2
         );
-        redBird.getSprite().setRotation(MathUtils.radiansToDegrees * redBird.getBody().getAngle());
+        currentBird.getSprite().setRotation(MathUtils.radiansToDegrees * currentBird.getBody().getAngle());
+        currentBird.getSprite().draw(game.getBatch());
 
-        redBird.getSprite().draw(game.getBatch());
+        for (int i = 0; i < birds.size(); i++) {
+            if (i != currentBirdIndex) {
+                ParentBird bird = birds.get(i);
+                bird.getSprite().setPosition(
+                    bird.getBody().getPosition().x - bird.getSprite().getWidth() / 2,
+                    bird.getBody().getPosition().y - bird.getSprite().getHeight() / 2
+                );
+                bird.getSprite().setRotation(MathUtils.radiansToDegrees * bird.getBody().getAngle());
+                bird.getSprite().draw(game.getBatch());
+            }
+        }
 
         for (int i = 0; i < blocks.size(); i++) {
             ParentBlock block = blocks.get(i);
@@ -229,11 +247,15 @@ public class Level2_Screen extends InputAdapter implements Screen {
 
         if (joint != null) {
             shapeRenderer.setProjectionMatrix(camera.combined);
-            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+            shapeRenderer.begin(com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType.Line);
             shapeRenderer.setColor(1, 0, 0, 1);
-            Vector2 slingshotOrigin = redBird.getBody().getPosition();
+
+            Vector2 slingshotOrigin = currentBird.getBody().getPosition();
+            shapeRenderer.line(slingshotOrigin.x, slingshotOrigin.y, slingShotStartPoint.x, slingShotStartPoint.y);
+
             Vector3 mousePosition = camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
             shapeRenderer.line(slingshotOrigin.x, slingshotOrigin.y, mousePosition.x, mousePosition.y);
+
             shapeRenderer.end();
         }
     }
@@ -255,12 +277,14 @@ public class Level2_Screen extends InputAdapter implements Screen {
         background.dispose();
         slingshot.dispose();
         pauseBtnTexture.dispose();
-        redBird.dispose();
         for (ParentBlock block : blocks) {
             block.dispose();
         }
         for (ParentPig pig : pigs) {
             pig.dispose();
+        }
+        for (ParentBird bird : birds) {
+            bird.dispose();
         }
     }
 
@@ -280,15 +304,18 @@ public class Level2_Screen extends InputAdapter implements Screen {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         camera.unproject(touchPoint.set(screenX, screenY, 0));
-        world.QueryAABB(queryCallback, touchPoint.x - 1, touchPoint.y - 1, touchPoint.x + 1, touchPoint.y + 1);
 
-        if(joint!=null){
-            slingShotStartPoint.set(touchPoint.x, touchPoint.y);
-        }
+        float ballRadius = 2f;
+        float scaledBallRadius = ballRadius / 2 * SCALE;
 
         if(pauseBtnBounds.contains(touchPoint.x, touchPoint.y)){
             new PauseScreen(game,this);
             return true;
+        }
+
+        if (touchPoint.dst(new Vector3(initialBallPosition, 0)) < scaledBallRadius) {
+            world.QueryAABB(queryCallback, touchPoint.x - 1, touchPoint.y - 1, touchPoint.x + 1, touchPoint.y + 1);
+            slingShotStartPoint.set(touchPoint.x, touchPoint.y);
         }
 
         return true;
@@ -298,8 +325,8 @@ public class Level2_Screen extends InputAdapter implements Screen {
     public boolean touchDragged(int screenX, int screenY, int pointer) {
         if (joint == null) return false;
 
-        camera.unproject(touchPoint.set(screenX, screenY, 0));
-        slingShotStartPoint.set(touchPoint.x, touchPoint.y);
+//        camera.unproject(touchPoint.set(screenX, screenY, 0));
+//        slingShotStartPoint.set(touchPoint.x, touchPoint.y);
 
         return true;
     }
@@ -308,18 +335,25 @@ public class Level2_Screen extends InputAdapter implements Screen {
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         if (joint == null) return false;
 
-        Vector2 slingshotOrigin = redBird.getBody().getPosition();
+        ParentBird currentBird = birds.get(currentBirdIndex);
+        currentBird.getBody().setType(BodyDef.BodyType.DynamicBody);
+
+        Vector2 slingshotOrigin = initialBallPosition;
         camera.unproject(touchPoint.set(screenX, screenY, 0));
         Vector2 dragDirection = new Vector2(touchPoint.x - slingshotOrigin.x, touchPoint.y - slingshotOrigin.y);
-
         if (dragDirection.len() > 0) {
             dragDirection.nor();
-            float impulseStrength = dragDirection.len() * 60f * SCALE;
-            redBird.getBody().applyLinearImpulse(dragDirection.scl(-impulseStrength), redBird.getBody().getWorldCenter(), true);
+            float impulseStrength = dragDirection.len() * 55f * SCALE;
+            currentBird.getBody().applyLinearImpulse(dragDirection.scl(-impulseStrength), currentBird.getBody().getWorldCenter(), true);
         }
 
         world.destroyJoint(joint);
         joint = null;
+
+        if(currentBirdIndex < birds.size()-1) {
+            currentBirdIndex++;
+            birds.get(currentBirdIndex).getBody().setTransform(155/SCALE,255/SCALE,0);
+        }
 
         return true;
     }

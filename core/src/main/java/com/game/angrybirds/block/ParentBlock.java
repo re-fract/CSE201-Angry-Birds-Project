@@ -37,7 +37,7 @@ public class ParentBlock {
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(x/SCALE, y/SCALE);
 
-        body = world.createBody(bodyDef); //Create body in the world
+        body = world.createBody(bodyDef);
 
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(width/2f/SCALE, height/2f/SCALE);
@@ -56,11 +56,10 @@ public class ParentBlock {
 
     public void checkFall() {
         float currentYPos = body.getPosition().y;
-        if (body.getPosition().y < currentYPos - fallThreshold) {
-            // Apply fall damage (1 damage when it falls more than the threshold)
+        if (!hasFallen && body.getPosition().y < currentYPos - fallThreshold) {
             takeDamage(1);
-            initialYPos = currentYPos; // Update the initial position after taking damage
-//            hasFallen = true; // Set flag so that damage is only applied once
+            initialYPos = currentYPos;
+            hasFallen = true;
             System.out.println("Block has fallen more than " + fallThreshold + " meters and took 1 damage. Health left: " + health);
         }
     }
@@ -87,7 +86,6 @@ public class ParentBlock {
     public boolean isMarkedForDestruction() {
         return markedForDestruction;
     }
-
 
     public void dispose() {
         texture.dispose();

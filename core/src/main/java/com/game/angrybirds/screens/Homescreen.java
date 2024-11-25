@@ -11,7 +11,6 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.game.angrybirds.Main;
 
-
 public class Homescreen implements Screen, InputProcessor {
     private final Main game;
     private Texture background;
