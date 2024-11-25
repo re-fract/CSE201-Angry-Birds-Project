@@ -13,8 +13,12 @@ public class ParentPig {
     protected World world;
     protected int health;
     protected float radius;
+    protected boolean hasFallen = false;
+    protected float initialYPos;
+    protected boolean markForDestruction = false;
+
+    private final float fallThreshold = 1f;
     private final float SCALE = 10f;
-    protected boolean markedForDestruction = false;
 
     public ParentPig(World world, String texture, int x, int y, int health, float radius) {
         this.world = world;
@@ -22,7 +26,7 @@ public class ParentPig {
         sprite = new Sprite(this.texture);
         this.health = health;
         this.radius = radius;
-
+        this.initialYPos = y/SCALE;
         createBody(x,y);
     }
 
@@ -44,8 +48,9 @@ public class ParentPig {
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
         fixtureDef.density = 1f;
-        fixtureDef.friction = 0.3f;
+        fixtureDef.friction = 0.5f;
         fixtureDef.restitution = 0.2f;
+        body.setUserData(this);
 
         body.createFixture(fixtureDef);
         shape.dispose();
@@ -57,6 +62,19 @@ public class ParentPig {
 
     public void takeDamage(int damage) {
         health -= damage;
+        if(health <= 0) {
+            markForDestruction = true;
+        }
+    }
+
+    public void checkFall() {
+        float currentYPos = body.getPosition().y;
+        if (currentYPos < initialYPos - fallThreshold) {
+            takeDamage(1);
+            initialYPos = currentYPos;
+//            hasFallen = true;
+            System.out.println("Pig has fallen more than " + fallThreshold + " meters and took 1 damage. Health left: " + health);
+        }
     }
 
     public boolean isDestroyed() {
@@ -64,11 +82,11 @@ public class ParentPig {
     }
 
     public void markForDestruction() {
-        markedForDestruction = true;
+        markForDestruction = true;
     }
 
     public boolean isMarkedForDestruction() {
-        return markedForDestruction;
+        return markForDestruction;
     }
 
     public void setBody(Body body) {

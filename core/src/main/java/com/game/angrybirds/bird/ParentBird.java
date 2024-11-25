@@ -57,5 +57,6 @@ abstract class ParentBird {
 
     public void dispose(){
         texture.dispose();
+        world.destroyBody(body);
     }
 }

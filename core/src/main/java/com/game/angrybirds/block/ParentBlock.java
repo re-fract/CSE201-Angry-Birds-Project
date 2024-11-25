@@ -14,8 +14,12 @@ public class ParentBlock {
     protected int width;
     protected Sprite sprite;
     protected int height;
+    protected boolean hasFallen = false;
+    protected float initialYPos;
     protected boolean markedForDestruction;
+
     private final float SCALE = 10f;
+    private final float fallThreshold = 1f;
 
     public ParentBlock(World world, String texture, float x, float y, int health, int width, int height) {
         this.world = world;
@@ -24,7 +28,7 @@ public class ParentBlock {
         this.health = health;
         this.width = width;
         this.height = height;
-
+        this.initialYPos = y/SCALE;
         createBody(x,y);
     }
 
@@ -41,14 +45,24 @@ public class ParentBlock {
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
         fixtureDef.density = 1f;
-        fixtureDef.friction = 0.2f;
-        fixtureDef.restitution = 0.1f;
+        body.setUserData(this);
 
         sprite.setSize(width/SCALE, height/SCALE);
         sprite.setOrigin(sprite.getWidth()/2, sprite.getHeight()/2);
 
         body.createFixture(fixtureDef);
         shape.dispose();
+    }
+
+    public void checkFall() {
+        float currentYPos = body.getPosition().y;
+        if (body.getPosition().y < currentYPos - fallThreshold) {
+            // Apply fall damage (1 damage when it falls more than the threshold)
+            takeDamage(1);
+            initialYPos = currentYPos; // Update the initial position after taking damage
+//            hasFallen = true; // Set flag so that damage is only applied once
+            System.out.println("Block has fallen more than " + fallThreshold + " meters and took 1 damage. Health left: " + health);
+        }
     }
 
     public void setBody(Body body) {
@@ -61,24 +75,19 @@ public class ParentBlock {
 
     public void takeDamage(int damage) {
         health -= damage;
+        if(health <= 0) {
+            markedForDestruction = true;
+        }
     }
 
     public boolean isDestroyed() {
         return health<=0;
     }
 
-    public void markForDestruction() {
-        markedForDestruction = true;
-    }
-
     public boolean isMarkedForDestruction() {
         return markedForDestruction;
     }
 
-    public void render(SpriteBatch batch) {
-        Vector2 position = body.getPosition();
-        batch.draw(texture, position.x, position.y, width, height);
-    }
 
     public void dispose() {
         texture.dispose();

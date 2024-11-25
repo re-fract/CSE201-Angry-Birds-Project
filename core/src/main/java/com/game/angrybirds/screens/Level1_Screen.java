@@ -41,7 +41,6 @@ public class Level1_Screen extends InputAdapter implements Screen {
     private MouseJoint joint;
     private MouseJointDef jointDef;
 
-    // Rectangle bounds for detecting button clicks
     private Rectangle pauseBtnBounds;
     private Vector3 touchPoint;
 
@@ -52,7 +51,6 @@ public class Level1_Screen extends InputAdapter implements Screen {
         this.game = game;
         this.bodiesToDestroy =new ArrayList<>();
 
-        // Load textures
         background = new Texture("level1.png");
         pigs = new ArrayList<>();
         blocks = new ArrayList<>();
@@ -101,7 +99,28 @@ public class Level1_Screen extends InputAdapter implements Screen {
         world.setContactListener(new ContactListener() {
             @Override
             public void beginContact(Contact contact) {
+                Body bodyA = contact.getFixtureA().getBody();
+                Body bodyB = contact.getFixtureB().getBody();
 
+                if (bodyA == redBird.getBody() || bodyB == redBird.getBody()) {
+                    Body collidedBody = (bodyA == redBird.getBody()) ? bodyB : bodyA;
+                    if (collidedBody.getUserData() instanceof ParentPig) {
+                        float speed = redBird.getBody().getLinearVelocity().len();
+                        int damage = getDamageBasedOnSpeed(speed);
+                        ParentPig pig = (ParentPig) collidedBody.getUserData();
+                        pig.takeDamage(damage);
+
+                        System.out.println("Pig took " + damage + " damage. Health left: " + pig.getHealth());
+                    }
+                    else if (collidedBody.getUserData() instanceof ParentBlock) {
+                        float speed = redBird.getBody().getLinearVelocity().len();
+                        int damage = getDamageBasedOnSpeed(speed);
+                        ParentBlock block = (ParentBlock) collidedBody.getUserData();
+                        block.takeDamage(damage);
+
+                        System.out.println("Block took " + damage + " damage. Health left: " + block.getHealth());
+                    }
+                }
             }
 
             @Override
@@ -110,75 +129,25 @@ public class Level1_Screen extends InputAdapter implements Screen {
             }
 
             @Override
-            public void preSolve(Contact contact, Manifold oldManifold) {
+            public void preSolve(Contact contact, Manifold manifold) {
 
             }
 
             @Override
-            public void postSolve(Contact contact, ContactImpulse impulse) {
-                if (impulse == null) {
-                    Gdx.app.log("Error", "Impulse is null");
-                    return;
-                }
+            public void postSolve(Contact contact, ContactImpulse contactImpulse) {
 
-                Fixture fixtureA = contact.getFixtureA();
-                Fixture fixtureB = contact.getFixtureB();
-
-                if (fixtureA == null || fixtureB == null) {
-                    Gdx.app.log("Error", "One of the fixtures is null!");
-                    return;
-                }
-
-                Body bodyA = fixtureA.getBody();
-                Body bodyB = fixtureB.getBody();
-
-                // Check if one of the bodies is the bird
-                boolean isBirdA = bodyA == redBird.getBody();
-                boolean isBirdB = bodyB == redBird.getBody();
-
-                // If neither body is the bird, return early
-                if (!isBirdA && !isBirdB) return;
-
-                float totalImpulse = 0f;
-                for (float normalImpulse : impulse.getNormalImpulses()) {
-                    totalImpulse += normalImpulse;
-                }
-
-                // Damage Blocks
-                for (ParentBlock block : blocks) {
-                    if ((bodyA == block.getBody() || bodyB == block.getBody())) {
-                        int damage = Math.max(1, (int) (totalImpulse));
-                        block.takeDamage(damage);
-
-                        if (block.isDestroyed()) {
-                            block.markForDestruction();
-                            Gdx.app.log("Collision", "Block destroyed!");
-                        } else {
-                            Gdx.app.log("Collision", "Block health: " + block.getHealth());
-                        }
-                        return; // Exit after finding the first block
-                    }
-                }
-
-                // Damage Pigs
-                for (ParentPig pig : pigs) {
-                    if ((bodyA == pig.getBody() || bodyB == pig.getBody())) {
-                        int damage = Math.max(1, (int) (totalImpulse / 10));
-                        pig.takeDamage(damage);
-
-                        if (pig.isDestroyed()) {
-                            pig.markForDestruction();
-                            Gdx.app.log("Collision", "Pig destroyed!");
-                        } else {
-                            Gdx.app.log("Collision", "Pig health: " + pig.getHealth());
-                        }
-                        return; // Exit after finding the first pig
-                    }
-                }
             }
-
-
         });
+    }
+
+    private int getDamageBasedOnSpeed(float speed) {
+        if (speed/SCALE > 25) {
+            return 3;
+        } else if (speed/SCALE > 15) {
+            return 2;
+        } else {
+            return 1;
+        }
     }
 
     @Override
@@ -204,6 +173,7 @@ public class Level1_Screen extends InputAdapter implements Screen {
 
         for (int i = 0; i < blocks.size(); i++) {
             ParentBlock block = blocks.get(i);
+            block.checkFall();
 
             if (block != null && !block.isDestroyed()) {
                 block.getSprite().setPosition(
@@ -214,19 +184,18 @@ public class Level1_Screen extends InputAdapter implements Screen {
                 block.getSprite().draw(game.getBatch());
             }
 
-
             if (block != null && block.isMarkedForDestruction()) {
                 bodiesToDestroy.add(block.getBody());
                 block.setBody(null);
                 blocks.remove(i);
                 i--;
             }
-
-
         }
 
         for (int i = 0; i < pigs.size(); i++) {
             ParentPig pig = pigs.get(i);
+            pig.checkFall();
+
             if(pig != null && !pig.isDestroyed()) {
                 pig.getSprite().setPosition(
                     pig.getBody().getPosition().x - pig.getSprite().getWidth() / 2,
@@ -243,7 +212,6 @@ public class Level1_Screen extends InputAdapter implements Screen {
                 pigs.remove(i);
                 i--;
             }
-
         }
 
         game.getBatch().draw(pauseBtnTexture, pauseBtnBounds.x, pauseBtnBounds.y, pauseBtnBounds.width, pauseBtnBounds.height);
@@ -259,12 +227,10 @@ public class Level1_Screen extends InputAdapter implements Screen {
             shapeRenderer.end();
         }
 
-        // Process deferred destruction
         for (Body body : bodiesToDestroy) {
             world.destroyBody(body);
         }
         bodiesToDestroy.clear();
-
     }
 
     @Override

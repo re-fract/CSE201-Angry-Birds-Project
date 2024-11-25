@@ -105,60 +105,58 @@ public class Level2_Screen extends InputAdapter implements Screen {
         world.setContactListener(new ContactListener() {
             @Override
             public void beginContact(Contact contact) {
+                // Detect when the bird collides with a pig or block
+                Body bodyA = contact.getFixtureA().getBody();
+                Body bodyB = contact.getFixtureB().getBody();
+
+                if (bodyA == redBird.getBody() || bodyB == redBird.getBody()) {
+                    Body collidedBody = (bodyA == redBird.getBody()) ? bodyB : bodyA;
+                    if (collidedBody.getUserData() instanceof ParentPig) {
+                        // Calculate damage based on bird speed
+                        float speed = redBird.getBody().getLinearVelocity().len();
+                        int damage = getDamageBasedOnSpeed(speed);
+                        ParentPig pig = (ParentPig) collidedBody.getUserData();
+                        pig.takeDamage(damage);
+
+                        System.out.println("Pig took " + damage + " damage. Health left: " + pig.getHealth());
+                    } else if (collidedBody.getUserData() instanceof ParentBlock) {
+                        // Calculate damage based on bird speed
+                        float speed = redBird.getBody().getLinearVelocity().len();
+                        int damage = getDamageBasedOnSpeed(speed);
+                        ParentBlock block = (ParentBlock) collidedBody.getUserData();
+                        block.takeDamage(damage);
+
+                        // Log the health of the block after taking damage
+                        System.out.println("Block took " + damage + " damage. Health left: " + block.getHealth());
+                    }
+                }
             }
 
             @Override
             public void endContact(Contact contact) {
+
             }
 
             @Override
-            public void preSolve(Contact contact, Manifold oldManifold) {
+            public void preSolve(Contact contact, Manifold manifold) {
+
             }
 
             @Override
-            public void postSolve(Contact contact, ContactImpulse impulse) {
-                Fixture fixtureA = contact.getFixtureA();
-                Fixture fixtureB = contact.getFixtureB();
+            public void postSolve(Contact contact, ContactImpulse contactImpulse) {
 
-                Body bodyA = fixtureA.getBody();
-                Body bodyB = fixtureB.getBody();
-
-                float totalImpulse = 0f;
-                for (float normalImpulse : impulse.getNormalImpulses()) {
-                    totalImpulse += normalImpulse;
-                }
-
-                for (ParentBlock block : blocks) {
-                    if (bodyA == block.getBody() || bodyB == block.getBody()) {
-                        int damage = Math.max(1, (int) (totalImpulse / SCALE));
-                        block.takeDamage(damage);
-
-                        if (block.isDestroyed()) {
-                            block.markForDestruction();
-                            Gdx.app.log("Collision", "Block destroyed!");
-                        } else {
-                            Gdx.app.log("Collision", "Block health: " + block.getHealth());
-                        }
-                        return;
-                    }
-                }
-
-                for (ParentPig pig : pigs) {
-                    if (bodyA == pig.getBody() || bodyB == pig.getBody()) {
-                        int damage = Math.max(1, (int) (totalImpulse / SCALE));
-                        pig.takeDamage(damage);
-
-                        if (pig.isDestroyed()) {
-                            pig.markForDestruction();
-                            Gdx.app.log("Collision", "Pig destroyed!");
-                        } else {
-                            Gdx.app.log("Collision", "Pig health: " + pig.getHealth());
-                        }
-                        return;
-                    }
-                }
             }
         });
+    }
+
+    private int getDamageBasedOnSpeed(float speed) {
+        if (speed/SCALE > 25) {
+            return 3;
+        } else if (speed/SCALE > 15) {
+            return 2;
+        } else {
+            return 1;
+        }
     }
 
     @Override
@@ -184,6 +182,7 @@ public class Level2_Screen extends InputAdapter implements Screen {
 
         for (int i = 0; i < blocks.size(); i++) {
             ParentBlock block = blocks.get(i);
+            block.checkFall();
 
             if (block != null && !block.isDestroyed()) {
                 block.getSprite().setPosition(
@@ -205,6 +204,8 @@ public class Level2_Screen extends InputAdapter implements Screen {
 
         for (int i = 0; i < pigs.size(); i++) {
             ParentPig pig = pigs.get(i);
+            pig.checkFall();
+
             if(pig != null && !pig.isDestroyed()) {
                 pig.getSprite().setPosition(
                     pig.getBody().getPosition().x - pig.getSprite().getWidth() / 2,

@@ -9,10 +9,4 @@ public class BlackBird extends ParentBird{
     public BlackBird(World world, float x, float y) {
         super(world,300,"blackbird.png",x,y);
     }
-
-    @Override
-    public void dispose(){
-        super.dispose();
-        world.destroyBody(body);
-    }
 }

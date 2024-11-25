@@ -26,10 +26,4 @@ public class YellowBird extends ParentBird{
         fixtureDef.restitution = 6f;
         body.createFixture(fixtureDef);
     }
-
-    @Override
-    public void dispose() {
-        super.dispose();
-        world.destroyBody(body);
-    }
 }

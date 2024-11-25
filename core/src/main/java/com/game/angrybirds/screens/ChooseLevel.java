@@ -103,12 +103,12 @@ public class ChooseLevel implements Screen, InputProcessor {
 
         if(level1BtnBounds.contains(touchPos.x, touchPos.y)){
             game.setScreen(new Level1_Screen(game));
-//            game.setScreen(new Tutorial());
+//            game.setScreen(new Tutorial2(game));
             return true;
         }
 
         if(level2BtnBounds.contains(touchPos.x, touchPos.y)){
-//                    game.setScreen();
+            game.setScreen(new Level2_Screen(game));
             return true;
         }
 
