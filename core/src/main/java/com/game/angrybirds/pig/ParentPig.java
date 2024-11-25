@@ -12,14 +12,16 @@ public class ParentPig {
     protected Body body;
     protected World world;
     protected int health;
+    protected float radius;
     private final float SCALE = 10f;
     protected boolean markedForDestruction = false;
 
-    public ParentPig(World world, String texture, int x, int y, int health) {
+    public ParentPig(World world, String texture, int x, int y, int health, float radius) {
         this.world = world;
         this.texture = new Texture(texture);
         sprite = new Sprite(this.texture);
         this.health = health;
+        this.radius = radius;
 
         createBody(x,y);
     }
@@ -32,12 +34,12 @@ public class ParentPig {
 
         body = world.createBody(bodyDef); //Create body in the world
 
-        float ballRadius = 2.5f;
-        sprite.setSize(2*ballRadius,2*ballRadius);
+//        float ballRadius = 2.5f;
+        sprite.setSize(2*radius,2*radius);
         sprite.setOrigin(sprite.getWidth()/2,sprite.getHeight()/2);
 
         CircleShape shape = new CircleShape();
-        shape.setRadius(ballRadius);
+        shape.setRadius(radius);
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
