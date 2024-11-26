@@ -6,21 +6,25 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 
-public abstract class ParentBird {
-    protected int Health_point_Dec;
+import java.io.Serializable;
+
+public abstract class ParentBird implements Serializable {
+    public int Health_point_Dec;
     protected World world;
     protected Texture texture;
     protected Sprite sprite;
     protected Body body;
     private final float SCALE = 10f;
+    public int flag;
 
-    public ParentBird(World world,int Health_point_Dec,String texture,float x,float y) {
+    public ParentBird(World world,int Health_point_Dec,String texture,float x,float y,int flag) {
         this.world = world;
         this.Health_point_Dec = Health_point_Dec;
         this.texture = new Texture(texture);
         sprite = new Sprite(this.texture);
 
         createBody(x,y);
+        this.flag=flag;
     }
 
     public void createBody(float x, float y){
