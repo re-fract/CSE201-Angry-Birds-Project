@@ -3,10 +3,12 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 
-public class YellowBird extends ParentBird{
+import java.io.Serializable;
+
+public class YellowBird extends ParentBird implements Serializable {
     private Body body;
     public YellowBird(World world, float x, float y) {
-        super(world,200,"yellowbird.png",x,y);
+        super(world,200,"yellowbird.png",x,y,2);
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(x, y);
