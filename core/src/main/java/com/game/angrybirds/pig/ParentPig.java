@@ -6,7 +6,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 
-public class ParentPig {
+import java.io.Serializable;
+
+public class ParentPig implements Serializable {
     protected Texture texture;
     protected Sprite sprite;
     protected Body body;
@@ -20,7 +22,9 @@ public class ParentPig {
     private final float fallThreshold = 1f;
     private final float SCALE = 10f;
 
-    public ParentPig(World world, String texture, int x, int y, int health, float radius) {
+    public int flag;
+
+    public ParentPig(World world, String texture, int x, int y, int health, float radius,int flag) {
         this.world = world;
         this.texture = new Texture(texture);
         sprite = new Sprite(this.texture);
@@ -28,6 +32,7 @@ public class ParentPig {
         this.radius = radius;
         this.initialYPos = y/SCALE;
         createBody(x,y);
+        this.flag = flag;
     }
 
     public void createBody(int x, int y) {
@@ -101,3 +106,4 @@ public class ParentPig {
         return sprite;
     }
 }
+
