@@ -53,7 +53,11 @@ public class GameOver implements Screen, InputProcessor {
     public void render(float v) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        game.getCamera().setToOrtho(false, 1280, 720);
+
         game.getBatch().begin();
+        game.getBatch().setProjectionMatrix(game.getCamera().combined);
         font.draw(game.getBatch(),"LEVEL FAILED!",465,600);
         game.getBatch().draw(pigLaugh,400,300,502,250);
         game.getBatch().draw(retryBtn,retryBtnBounds.x,retryBtnBounds.y,retryBtnBounds.width,retryBtnBounds.height);

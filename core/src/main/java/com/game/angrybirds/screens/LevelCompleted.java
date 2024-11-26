@@ -30,7 +30,6 @@ public class LevelCompleted extends InputAdapter implements Screen  {
 
         touchPoint = new Vector3();
 
-
         Gdx.input.setInputProcessor(this);
     }
 
@@ -45,8 +44,10 @@ public class LevelCompleted extends InputAdapter implements Screen  {
         Gdx.gl.glClearColor(1f, 0f, 0f, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        game.getBatch().begin();
+        game.getCamera().setToOrtho(false, 1280, 720);
 
+        game.getBatch().begin();
+        game.getBatch().setProjectionMatrix(game.getCamera().combined);
         game.getBatch().draw(level_comp_log, 0, 0, 1280, 720);
         game.getBatch().draw(menu,menuBtnBounds.x,menuBtnBounds.y,menuBtnBounds.width,menuBtnBounds.height);
         game.getBatch().draw(exit, exitBtnBounds.x, exitBtnBounds.y, exitBtnBounds.width, exitBtnBounds.height);
