@@ -15,16 +15,19 @@ import com.game.angrybirds.Main;
 public class PauseScreen implements Screen, InputProcessor {
     private final Main game;
     private final Screen currentScreen;
+    private Texture background;
     private Texture resumeBtn;
     private Texture exitBtn;
     private BitmapFont font;
     private Rectangle resumeBtnBounds;
     private Rectangle exitBtnBounds;
     private Vector3 touchPos;
+    private final float SCALE = 10f;
 
-    public PauseScreen(Main game, Screen currentScreen) {
+    public PauseScreen(Main game, Screen currentScreen, String background) {
         this.game = game;
         this.currentScreen = currentScreen;
+        this.background = new Texture(background);
         resumeBtn = new Texture("resume.png");
         exitBtn = new Texture("exit2.png");
 
@@ -38,8 +41,8 @@ public class PauseScreen implements Screen, InputProcessor {
         font = generator.generateFont(parameter);
         generator.dispose();
 
-        resumeBtnBounds = new Rectangle(500, 250, 120, 120);
-        exitBtnBounds = new Rectangle(700, 250, 120, 120);
+        resumeBtnBounds = new Rectangle(500/SCALE, 250/SCALE, 120/SCALE, 120/SCALE);
+        exitBtnBounds = new Rectangle(700/SCALE, 250/SCALE, 120/SCALE, 120/SCALE);
         touchPos = new Vector3();
 
         Gdx.input.setInputProcessor(this);
@@ -55,10 +58,12 @@ public class PauseScreen implements Screen, InputProcessor {
         Gdx.gl.glClearColor(1f,1f,1f,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        currentScreen.render(v);
+        font.getData().setScale(0.1f);
 
         game.getBatch().begin();
-        font.draw(game.getBatch(),"PAUSED!",490,450);
+        game.getBatch().setProjectionMatrix(game.getCamera().combined);
+        game.getBatch().draw(background,0,0,1280/SCALE,720/SCALE);
+        font.draw(game.getBatch(),"PAUSED!",490/SCALE,450/SCALE );
         game.getBatch().draw(resumeBtn,resumeBtnBounds.x,resumeBtnBounds.y,resumeBtnBounds.width,resumeBtnBounds.height);
         game.getBatch().draw(exitBtn,exitBtnBounds.x,exitBtnBounds.y,exitBtnBounds.width,exitBtnBounds.height);
         game.getBatch().end();

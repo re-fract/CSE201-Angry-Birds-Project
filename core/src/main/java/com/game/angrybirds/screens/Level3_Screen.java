@@ -39,6 +39,7 @@ public class Level3_Screen extends InputAdapter implements Screen {
     private Vector2 slingShotStartPoint;
     private ShapeRenderer shapeRenderer;
 
+    private boolean isIntialized = false;
     private final float TIMESTEP = 1 / 60f;
     private final int VELOCITYITERATIONS = 8, POSITIONITERATIONS = 3;
     private final float SCALE = 10f;
@@ -73,6 +74,9 @@ public class Level3_Screen extends InputAdapter implements Screen {
     @Override
     public void show() {
         Gdx.input.setInputProcessor(this);
+
+        if(isIntialized) return;
+
         world = new World(new Vector2(0, -9.81f), true);
         camera = game.getCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth() / SCALE, Gdx.graphics.getHeight() / SCALE);
@@ -173,6 +177,8 @@ public class Level3_Screen extends InputAdapter implements Screen {
 
             }
         });
+
+        isIntialized = true;
     }
 
     private int getDamageBasedOnSpeed(float speed) {
@@ -334,7 +340,7 @@ public class Level3_Screen extends InputAdapter implements Screen {
         float scaledBallRadius = ballRadius / 2 * SCALE;
 
         if(pauseBtnBounds.contains(touchPoint.x, touchPoint.y)){
-            new PauseScreen(game,this);
+            game.setScreen(new PauseScreen(game,this,"level3.png"));
             return true;
         }
 
