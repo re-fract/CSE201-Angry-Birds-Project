@@ -14,19 +14,22 @@ import com.badlogic.gdx.physics.box2d.joints.MouseJoint;
 import com.badlogic.gdx.physics.box2d.joints.MouseJointDef;
 import com.game.angrybirds.Main;
 import com.game.angrybirds.bird.*;
+import com.game.angrybirds.block.GlassBlock;
 import com.game.angrybirds.block.ParentBlock;
+import com.game.angrybirds.block.StoneBlock;
 import com.game.angrybirds.block.WoodBlock;
 import com.game.angrybirds.pig.*;
 
+import java.io.*;
 import java.util.ArrayList;
 
-public class Level1_Screen extends InputAdapter implements Screen {
+public class Level1_Screen extends InputAdapter implements Screen , Serializable {
     private final Main game;
     private Texture background;
-    private ArrayList<ParentPig> pigs;
-    private ArrayList<ParentBlock> blocks;
-    private ArrayList<ParentBird> birds;
-    private int currentBirdIndex;
+    public ArrayList<ParentPig> pigs;
+    public ArrayList<ParentBlock> blocks;
+    public ArrayList<ParentBird> birds;
+    public int currentBirdIndex;
     private Texture slingshot;
     private Texture pauseBtnTexture;
     private World world;
@@ -50,6 +53,7 @@ public class Level1_Screen extends InputAdapter implements Screen {
     private Box2DDebugRenderer debugRenderer;
     private final ArrayList<Body> bodiesToDestroy;
 
+
     public Level1_Screen(Main game) {
         this.game = game;
         this.bodiesToDestroy =new ArrayList<>();
@@ -65,7 +69,8 @@ public class Level1_Screen extends InputAdapter implements Screen {
         slingShotStartPoint = new Vector2();
         shapeRenderer = new ShapeRenderer();
         touchPoint = new Vector3();
-        pauseBtnBounds = new Rectangle(1220/SCALE, 660/SCALE, 50/SCALE, 50/SCALE);
+        pauseBtnBounds = new Rectangle(0/SCALE, 0/SCALE, 50/SCALE, 50/SCALE);
+
     }
 
     @Override
@@ -75,6 +80,7 @@ public class Level1_Screen extends InputAdapter implements Screen {
         if(isIntialized) return;
 
         world = new World(new Vector2(0, -9.81f), true);
+
         camera = game.getCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth() / SCALE, Gdx.graphics.getHeight() / SCALE);
         camera.update();
@@ -82,22 +88,38 @@ public class Level1_Screen extends InputAdapter implements Screen {
 
         createWalls();
 
+
+
+        initialBallPosition = new Vector2(155/SCALE,255/SCALE);
+        birds.add(new RedBird(world, 155, 255));
+
+        pigs.add(new NormalPig(world, 950, 150,3,2.5f));
+
+        blocks.add(new WoodBlock(world, 900, 110,2));
+        blocks.add(new WoodBlock(world, 1000, 110,2));
+
+
+        String filePath = "save_game.txt";
+        File file = new File(filePath);
+
+        if (file.exists()) {
+            System.out.println("The file exists.");
+            loadGame(game,this);
+            file.delete();
+        }
+        else {
+            System.out.println("The file does not exist.");
+        }
+
+
         BodyDef groundBodyDef = new BodyDef();
         groundBodyDef.type = BodyDef.BodyType.StaticBody;
         Body groundBody = world.createBody(groundBodyDef);
 
         EdgeShape groundShape = new EdgeShape();
-        groundShape.set(0, 10, 128, 10);
-        groundBody.createFixture(groundShape, 0);
+        groundShape.set(-500, 10, 500, 10);
+        groundBody.createFixture(groundShape, 1);
         groundShape.dispose();
-
-        initialBallPosition = new Vector2(155/SCALE,255/SCALE);
-        birds.add(new RedBird(world, 155, 255));
-
-        pigs.add(new NormalPig(world, 950, 144,3,2.5f));
-
-        blocks.add(new WoodBlock(world, 900, 105));
-        blocks.add(new WoodBlock(world, 1000, 105));
 
         jointDef = new MouseJointDef();
         jointDef.bodyA = groundBody;
@@ -313,8 +335,31 @@ public class Level1_Screen extends InputAdapter implements Screen {
         float scaledBallRadius = ballRadius / 2 * SCALE;
 
         if(pauseBtnBounds.contains(touchPoint.x, touchPoint.y)){
-            game.setScreen(new PauseScreen(game,this,"level1.png"));
-            return true;
+            GameState state = new GameState();
+            state.pigPositions = new ArrayList<>();
+            for (ParentPig pig : pigs) {
+                state.pigPositions.add(new int[]{(int)pig.getBody().getPosition().x*10, (int)pig.getBody().getPosition().y*10, (int)pig.getHealth(),pig.flag});
+            }
+
+            state.blockPositions = new ArrayList<>();
+            for (ParentBlock block : blocks) {
+                state.blockPositions.add(new int[]{(int)block.getBody().getPosition().x*10, (int)block.getBody().getPosition().y*10, (int)block.getHealth(),block.flag});
+            }
+
+            state.birdPositions = new ArrayList<>();
+            for (ParentBird bird : birds) {
+                state.birdPositions.add(new int[]{(int)bird.getBody().getPosition().x*10, (int)bird.getBody().getPosition().y*10, bird.flag});
+            }
+
+            state.currentBirdIndex = currentBirdIndex;
+
+            try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("save_game.txt"))) {
+                out.writeObject(state);
+                System.out.println("Game saved");
+            }
+            catch (IOException e) {
+                System.out.println("Failed to save game state: ");
+            }
         }
 
         if (touchPoint.dst(new Vector3(initialBallPosition, 0)) < scaledBallRadius) {
@@ -328,10 +373,7 @@ public class Level1_Screen extends InputAdapter implements Screen {
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
         if (joint == null) return false;
-
-//        camera.unproject(touchPoint.set(screenX, screenY, 0));
-//        slingShotStartPoint.set(touchPoint.x, touchPoint.y);
-
+        
         return true;
     }
 
@@ -386,4 +428,69 @@ public class Level1_Screen extends InputAdapter implements Screen {
         left_shape.dispose();
         right_shape.dispose();
     }
+
+    public void loadGame(Main game,Level1_Screen level1_screen) {
+        world = new World(new Vector2(0, -9.81f), true);
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream("save_game.txt"))) {
+            GameState state = (GameState) in.readObject();
+
+            level1_screen.pigs.clear();
+            level1_screen.blocks.clear();
+            level1_screen.birds.clear();
+
+            for (int[] pigData : state.pigPositions) {
+                if(pigData[3]==1){
+                    ParentPig pig = new CrownPig(world, pigData[0], pigData[1], pigData[2], 2.5f);
+                    level1_screen.pigs.add(pig);
+                }
+                else if(pigData[3]==2){
+                    ParentPig pig = new PrincessPig(world, pigData[0], pigData[1], pigData[2], 2.5f);
+                    level1_screen.pigs.add(pig);
+                }
+                else if(pigData[3]==3){
+                    ParentPig pig = new NormalPig(world, pigData[0], pigData[1] + 10, pigData[2], 2.5f);
+                    level1_screen.pigs.add(pig);
+                }
+
+            }
+            for (int[] birdData : state.birdPositions) {
+                if(birdData[2]==1){
+                    ParentBird bird = new RedBird(world, birdData[0], birdData[1]);
+                    level1_screen.birds.add(bird);
+                }
+                else if(birdData[2]==2){
+                    ParentBird bird = new YellowBird(world, birdData[0], birdData[1]);
+                    level1_screen.birds.add(bird);
+                }
+                else if(birdData[2]==3){
+                    ParentBird bird = new BlackBird(world, birdData[0], birdData[1]);
+                    level1_screen.birds.add(bird);
+                }
+
+            }
+            for (int[] blockData : state.blockPositions) {
+                if(blockData[3]==1){
+                    ParentBlock block = new GlassBlock(world, blockData[0], blockData[1] + 40, blockData[2]);
+                    level1_screen.blocks.add(block);
+                }
+                else if(blockData[3]==2){
+                    ParentBlock block = new WoodBlock(world, blockData[0] + 10, blockData[1] + 40, blockData[2]);
+                    level1_screen.blocks.add(block);
+                }
+                else if(blockData[3]==3){
+                    ParentBlock block = new StoneBlock(world, blockData[0] + 10, blockData[1] + 40, blockData[2]);
+                    level1_screen.blocks.add(block);
+                }
+
+            }
+
+            level1_screen.currentBirdIndex = state.currentBirdIndex;
+
+        }
+        catch (IOException | ClassNotFoundException e) {
+            System.out.println("Failed to load game state: " +e.getMessage());
+        }
+
+    }
+
 }
