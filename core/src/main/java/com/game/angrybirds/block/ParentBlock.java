@@ -6,7 +6,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 
-public class ParentBlock {
+import java.io.Serializable;
+
+public class ParentBlock implements Serializable {
     protected Texture texture;
     protected Body body;
     protected World world;
@@ -21,7 +23,9 @@ public class ParentBlock {
     private final float SCALE = 10f;
     private final float fallThreshold = 1f;
 
-    public ParentBlock(World world, String texture, float x, float y, int health, int width, int height) {
+    public int flag;
+
+    public ParentBlock(World world, String texture, float x, float y, int health, int width, int height,int flag) {
         this.world = world;
         this.texture = new Texture(texture);
         sprite = new Sprite(this.texture);
@@ -30,6 +34,7 @@ public class ParentBlock {
         this.height = height;
         this.initialYPos = y/SCALE;
         createBody(x,y);
+        this.flag=flag;
     }
 
     public void createBody(float x, float y) {
