@@ -54,6 +54,10 @@ public class Level2_Screen extends InputAdapter implements Screen {
     private Rectangle saveBtnBounds;
     private Vector3 touchPoint;
 
+    private boolean allBirdsShot = false;
+    private float gameOverTimer = 0f;
+    private float levelCompleteTimer = 0f;
+
     private Box2DDebugRenderer debugRenderer;
 
     public Level2_Screen(Main game, boolean loadGame) {
@@ -192,6 +196,22 @@ public class Level2_Screen extends InputAdapter implements Screen {
 
         world.step(TIMESTEP, VELOCITYITERATIONS, POSITIONITERATIONS);
         debugRenderer.render(world, camera.combined);
+
+        if(allBirdsShot){
+            gameOverTimer += delta;
+
+            if(gameOverTimer >= 12f){
+                game.setScreen(new GameOver(game,2));
+            }
+        }
+
+        if(pigs.isEmpty()){
+            levelCompleteTimer += delta;
+
+            if(levelCompleteTimer >= 3f) {
+                game.setScreen(new LevelCompleted(game));
+            }
+        }
 
         game.getBatch().begin();
         game.getBatch().draw(background,0,0,1280/SCALE,720/SCALE);
@@ -380,6 +400,9 @@ public class Level2_Screen extends InputAdapter implements Screen {
         if(currentBirdIndex < birds.size()-1) {
             currentBirdIndex++;
             birds.get(currentBirdIndex).getBody().setTransform(initialBallPosition.x,initialBallPosition.y,0);
+        }
+        else{
+            allBirdsShot = true;
         }
 
         return true;

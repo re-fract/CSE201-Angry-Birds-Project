@@ -54,6 +54,10 @@ public class Level1_Screen extends InputAdapter implements Screen, Serializable 
     private Rectangle pauseBtnBounds;
     private Vector3 touchPoint;
 
+    private boolean allBirdsShot = false;
+    private float gameOverTimer = 0f;
+    private float levelCompleteTimer = 0f;
+
     private Box2DDebugRenderer debugRenderer;
     private final ArrayList<Body> bodiesToDestroy;
 
@@ -187,6 +191,22 @@ public class Level1_Screen extends InputAdapter implements Screen, Serializable 
         world.step(TIMESTEP, VELOCITYITERATIONS, POSITIONITERATIONS);
 
         debugRenderer.render(world, camera.combined);
+
+        if(allBirdsShot){
+            gameOverTimer += delta;
+
+            if(gameOverTimer >= 12f){
+                game.setScreen(new GameOver(game,1));
+            }
+        }
+
+        if(pigs.isEmpty()){
+            levelCompleteTimer += delta;
+
+            if(levelCompleteTimer >= 3f) {
+                game.setScreen(new LevelCompleted(game));
+            }
+        }
 
         game.getBatch().begin();
         game.getBatch().draw(background,0,0,1280/SCALE,720/SCALE);
@@ -376,6 +396,9 @@ public class Level1_Screen extends InputAdapter implements Screen, Serializable 
         if(currentBirdIndex < birds.size()-1) {
             currentBirdIndex++;
             birds.get(currentBirdIndex).getBody().setTransform(155/SCALE,255/SCALE,0);
+        }
+        else{
+            allBirdsShot = true;
         }
 
         return true;
