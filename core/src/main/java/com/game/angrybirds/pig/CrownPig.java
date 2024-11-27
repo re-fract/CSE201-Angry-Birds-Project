@@ -8,7 +8,7 @@ import java.io.Serializable;
 public class CrownPig extends ParentPig implements Serializable {
 
 
-    public CrownPig(World world, int x, int y, int health, float radius) {
+    public CrownPig(World world, float x, float y, int health, float radius) {
         super(world,"pig_crown.png", x, y, health, radius,1);
 
     }

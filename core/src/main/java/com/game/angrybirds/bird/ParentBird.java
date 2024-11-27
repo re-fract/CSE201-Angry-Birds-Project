@@ -9,22 +9,22 @@ import com.badlogic.gdx.physics.box2d.*;
 import java.io.Serializable;
 
 public abstract class ParentBird implements Serializable {
-    public int Health_point_Dec;
+
     protected World world;
     protected Texture texture;
     protected Sprite sprite;
     protected Body body;
-    private final float SCALE = 10f;
-    public int flag;
+    protected int flag;
 
-    public ParentBird(World world,int Health_point_Dec,String texture,float x,float y,int flag) {
+    private final float SCALE = 10f;
+
+    public ParentBird(World world, String texture, float x, float y, int flag) {
         this.world = world;
-        this.Health_point_Dec = Health_point_Dec;
         this.texture = new Texture(texture);
         sprite = new Sprite(this.texture);
+        this.flag=flag;
 
         createBody(x,y);
-        this.flag=flag;
     }
 
     public void createBody(float x, float y){
@@ -50,6 +50,10 @@ public abstract class ParentBird implements Serializable {
 
         body.createFixture(fixtureDef);
         shape.dispose();
+    }
+
+    public int getFlag() {
+        return flag;
     }
 
     public Body getBody() {

@@ -19,13 +19,12 @@ public class ParentBlock implements Serializable {
     protected boolean hasFallen = false;
     protected float initialYPos;
     protected boolean markedForDestruction;
+    protected int flag;
 
     private final float SCALE = 10f;
     private final float fallThreshold = 1f;
 
-    public int flag;
-
-    public ParentBlock(World world, String texture, float x, float y, int health, int width, int height,int flag) {
+    public ParentBlock(World world, String texture, float x, float y, int health, int width, int height, int flag) {
         this.world = world;
         this.texture = new Texture(texture);
         sprite = new Sprite(this.texture);
@@ -33,8 +32,9 @@ public class ParentBlock implements Serializable {
         this.width = width;
         this.height = height;
         this.initialYPos = y/SCALE;
-        createBody(x,y);
         this.flag=flag;
+
+        createBody(x,y);
     }
 
     public void createBody(float x, float y) {
@@ -95,6 +95,10 @@ public class ParentBlock implements Serializable {
     public void dispose() {
         texture.dispose();
         world.destroyBody(body);
+    }
+
+    public int getFlag(){
+        return flag;
     }
 
     public Body getBody() {

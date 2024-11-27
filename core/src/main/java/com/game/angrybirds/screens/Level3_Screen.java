@@ -13,6 +13,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.joints.MouseJoint;
 import com.badlogic.gdx.physics.box2d.joints.MouseJointDef;
+import com.game.angrybirds.GameState;
 import com.game.angrybirds.Main;
 import com.game.angrybirds.bird.*;
 import com.game.angrybirds.block.GlassBlock;
@@ -21,6 +22,7 @@ import com.game.angrybirds.block.StoneBlock;
 import com.game.angrybirds.block.WoodBlock;
 import com.game.angrybirds.pig.*;
 
+import java.io.*;
 import java.util.ArrayList;
 
 public class Level3_Screen extends InputAdapter implements Screen {
@@ -83,17 +85,6 @@ public class Level3_Screen extends InputAdapter implements Screen {
         camera.update();
         debugRenderer = new Box2DDebugRenderer();
 
-        createWalls();
-
-        BodyDef groundBodyDef = new BodyDef();
-        groundBodyDef.type = BodyDef.BodyType.StaticBody;
-        Body groundBody = world.createBody(groundBodyDef);
-
-        EdgeShape groundShape = new EdgeShape();
-        groundShape.set(0, 10, 128, 10);
-        groundBody.createFixture(groundShape, 0);
-        groundShape.dispose();
-
         initialBallPosition = new Vector2(155/SCALE,255/SCALE);
         birds.add(new RedBird(world, 155, 255));
         birds.add(new RedBird(world, 130,123));
@@ -124,6 +115,28 @@ public class Level3_Screen extends InputAdapter implements Screen {
         blocks.add(new GlassBlock(world, 640, 144));
         blocks.add(new WoodBlock(world, 640, 183));
         blocks.add(new GlassBlock(world, 640, 222));
+
+        File file = new File("GameSaves\\level3_sav.txt");
+
+        if (file.exists()) {
+            System.out.println("The file exists.");
+            loadGame();
+//            file.delete();
+        }
+        else {
+            System.out.println("The file does not exist.");
+        }
+
+        createWalls();
+
+        BodyDef groundBodyDef = new BodyDef();
+        groundBodyDef.type = BodyDef.BodyType.StaticBody;
+        Body groundBody = world.createBody(groundBodyDef);
+
+        EdgeShape groundShape = new EdgeShape();
+        groundShape.set(0, 10, 128, 10);
+        groundBody.createFixture(groundShape, 0);
+        groundShape.dispose();
 
         jointDef = new MouseJointDef();
         jointDef.bodyA = groundBody;
@@ -412,5 +425,94 @@ public class Level3_Screen extends InputAdapter implements Screen {
 
         left_shape.dispose();
         right_shape.dispose();
+    }
+
+    private void saveGame(){
+        GameState state = new GameState();
+        state.pigPositions = new ArrayList<>();
+        for (ParentPig pig : pigs) {
+            state.pigPositions.add(new float[]{pig.getBody().getPosition().x*10, pig.getBody().getPosition().y*10, pig.getHealth(), pig.getRadius(), pig.getFlag()});
+        }
+
+        state.blockPositions = new ArrayList<>();
+        for (ParentBlock block : blocks) {
+            state.blockPositions.add(new float[]{block.getBody().getPosition().x*10, block.getBody().getPosition().y*10, block.getHealth(), block.getFlag()});
+        }
+
+        state.birdPositions = new ArrayList<>();
+        for (ParentBird bird : birds) {
+            state.birdPositions.add(new float[]{bird.getBody().getPosition().x*10, bird.getBody().getPosition().y*10, bird.getFlag()});
+        }
+
+        state.currentBirdIndex = currentBirdIndex;
+
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("GameSaves\\level3_sav.txt"))) {
+            out.writeObject(state);
+            System.out.println("Game saved");
+        }
+        catch (IOException e) {
+            System.out.println("Failed to save game state: " + e.getMessage());
+        }
+    }
+
+    private void loadGame() {
+        world = new World(new Vector2(0, -9.81f), true);
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream("GameSaves\\level3_sav.txt"))) {
+            GameState state = (GameState) in.readObject();
+
+            pigs.clear();
+            blocks.clear();
+            birds.clear();
+
+            for (float[] pigData : state.pigPositions) {
+                if(pigData[4]==1){
+                    ParentPig pig = new CrownPig(world, pigData[0], pigData[1], (int) pigData[2], pigData[3]);
+                    pigs.add(pig);
+                }
+                else if(pigData[4]==2){
+                    ParentPig pig = new PrincessPig(world, pigData[0], pigData[1], (int) pigData[2], pigData[3]);
+                    pigs.add(pig);
+                }
+                else if(pigData[4]==3){
+                    ParentPig pig = new NormalPig(world, pigData[0], pigData[1], (int) pigData[2], pigData[3]);
+                    pigs.add(pig);
+                }
+
+            }
+            for (float[] birdData : state.birdPositions) {
+                if(birdData[2]==1){
+                    ParentBird bird = new RedBird(world, birdData[0], birdData[1]);
+                    birds.add(bird);
+                }
+                else if(birdData[2]==2){
+                    ParentBird bird = new YellowBird(world, birdData[0], birdData[1]);
+                    birds.add(bird);
+                }
+                else if(birdData[2]==3){
+                    ParentBird bird = new BlackBird(world, birdData[0], birdData[1]);
+                    birds.add(bird);
+                }
+
+            }
+            for (float[] blockData : state.blockPositions) {
+                if(blockData[3]==1){
+                    ParentBlock block = new GlassBlock(world, blockData[0], blockData[1] , (int) blockData[2]);
+                    blocks.add(block);
+                }
+                else if(blockData[3]==2){
+                    ParentBlock block = new WoodBlock(world, blockData[0], blockData[1], (int) blockData[2]);
+                    blocks.add(block);
+                }
+                else if(blockData[3]==3){
+                    ParentBlock block = new StoneBlock(world, blockData[0], blockData[1], (int) blockData[2]);
+                    blocks.add(block);
+                }
+            }
+
+            currentBirdIndex = state.currentBirdIndex;
+        }
+        catch (IOException | ClassNotFoundException e) {
+            System.out.println("Failed to load game state: " + e.getMessage());
+        }
     }
 }

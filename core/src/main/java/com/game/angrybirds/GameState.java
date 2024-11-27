@@ -1,20 +1,11 @@
-//basic structure
 package com.game.angrybirds;
-
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
-
 import java.io.*;
+import java.util.ArrayList;
 
 public class GameState implements Serializable {
-
-    public int current_Level;
-    public int pig_Alive;
-    public int bird_Alive;
-    public int box_Left;
-    //other attributes
-
-    public void Save_GameState(){
-    }
-
+    public ArrayList<float[]> pigPositions; // [x, y, health, radius,flag]
+    public ArrayList<float[]> blockPositions; // [x, y, health, flag]
+    public ArrayList<float[]> birdPositions; // [x, y, flag]
+    public int currentBirdIndex;
+//    public World world ;
 }

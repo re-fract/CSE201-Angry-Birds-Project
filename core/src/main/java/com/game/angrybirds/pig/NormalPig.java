@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 public class NormalPig extends ParentPig implements Serializable {
 
-    public NormalPig(World world,int x, int y, int health, float radius) {
+    public NormalPig(World world,float x, float y, int health, float radius) {
         super(world,"pig.png", x, y, health, radius,3);
 
     }

@@ -18,13 +18,13 @@ public class ParentPig implements Serializable {
     protected boolean hasFallen = false;
     protected float initialYPos;
     protected boolean markForDestruction = false;
+    protected int flag;
 
     private final float fallThreshold = 1f;
     private final float SCALE = 10f;
 
-    public int flag;
 
-    public ParentPig(World world, String texture, int x, int y, int health, float radius,int flag) {
+    public ParentPig(World world, String texture, float x, float y, int health, float radius, int flag) {
         this.world = world;
         this.texture = new Texture(texture);
         sprite = new Sprite(this.texture);
@@ -35,7 +35,7 @@ public class ParentPig implements Serializable {
         this.flag = flag;
     }
 
-    public void createBody(int x, int y) {
+    public void createBody(float x, float y) {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(x/SCALE, y/SCALE);
@@ -96,6 +96,14 @@ public class ParentPig implements Serializable {
     public void dispose(){
         texture.dispose();
         world.destroyBody(body);
+    }
+
+    public float getRadius(){
+        return radius;
+    }
+
+    public int getFlag(){
+        return flag;
     }
 
     public Body getBody(){
