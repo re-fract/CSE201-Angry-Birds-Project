@@ -34,6 +34,7 @@ public class Level3_Screen extends InputAdapter implements Screen {
     private int currentBirdIndex;
     private Texture slingshot;
     private Texture pauseBtnTexture;
+    private Texture saveBtnTexture;
     private World world;
     private OrthographicCamera camera;
 
@@ -41,6 +42,7 @@ public class Level3_Screen extends InputAdapter implements Screen {
     private Vector2 slingShotStartPoint;
     private ShapeRenderer shapeRenderer;
 
+    private boolean loadGame;
     private boolean isIntialized = false;
     private final float TIMESTEP = 1 / 60f;
     private final int VELOCITYITERATIONS = 8, POSITIONITERATIONS = 3;
@@ -49,15 +51,17 @@ public class Level3_Screen extends InputAdapter implements Screen {
     private MouseJoint joint;
     private MouseJointDef jointDef;
 
+    private Rectangle saveBtnBounds;
     private Rectangle pauseBtnBounds;
     private Vector3 touchPoint;
 
     private Box2DDebugRenderer debugRenderer;
     private final ArrayList<Body> bodiesToDestroy;
 
-    public Level3_Screen(Main game) {
+    public Level3_Screen(Main game, boolean loadGame) {
         this.game = game;
-        this.bodiesToDestroy =new ArrayList<>();
+        this.bodiesToDestroy = new ArrayList<>();
+        this.loadGame = loadGame;
 
         background = new Texture("level3.png");
         pigs = new ArrayList<>();
@@ -65,11 +69,14 @@ public class Level3_Screen extends InputAdapter implements Screen {
         birds = new ArrayList<>();
 
         pauseBtnTexture = new Texture("pause.png");
+        saveBtnTexture = new Texture("save.png");
         slingshot = new Texture("slingshot.png");
 
         slingShotStartPoint = new Vector2();
         shapeRenderer = new ShapeRenderer();
         touchPoint = new Vector3();
+
+        saveBtnBounds = new Rectangle(1160/SCALE, 660/SCALE, 50/SCALE, 50/SCALE);
         pauseBtnBounds = new Rectangle(1220/SCALE, 660/SCALE, 50/SCALE, 50/SCALE);
     }
 
@@ -116,15 +123,8 @@ public class Level3_Screen extends InputAdapter implements Screen {
         blocks.add(new WoodBlock(world, 640, 183));
         blocks.add(new GlassBlock(world, 640, 222));
 
-        File file = new File("GameSaves\\level3_sav.txt");
-
-        if (file.exists()) {
-            System.out.println("The file exists.");
+        if(this.loadGame) {
             loadGame();
-//            file.delete();
-        }
-        else {
-            System.out.println("The file does not exist.");
         }
 
         createWalls();
@@ -281,6 +281,7 @@ public class Level3_Screen extends InputAdapter implements Screen {
             }
         }
 
+        game.getBatch().draw(saveBtnTexture, saveBtnBounds.x, saveBtnBounds.y, saveBtnBounds.width, saveBtnBounds.height);
         game.getBatch().draw(pauseBtnTexture, pauseBtnBounds.x, pauseBtnBounds.y, pauseBtnBounds.width, pauseBtnBounds.height);
         game.getBatch().end();
 
@@ -351,6 +352,11 @@ public class Level3_Screen extends InputAdapter implements Screen {
 
         float ballRadius = 2f;
         float scaledBallRadius = ballRadius / 2 * SCALE;
+
+        if(saveBtnBounds.contains(touchPoint.x, touchPoint.y)){
+            saveGame();
+            return true;
+        }
 
         if(pauseBtnBounds.contains(touchPoint.x, touchPoint.y)){
             game.setScreen(new PauseScreen(game,this,"level3.png"));

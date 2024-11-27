@@ -9,7 +9,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.game.angrybirds.Main;
 
-public class ChooseLevel implements Screen, InputProcessor {
+public class LoadGameScreen implements Screen, InputProcessor {
     private final Main game;
     private Texture background;
     private Texture level1Btn;
@@ -23,7 +23,7 @@ public class ChooseLevel implements Screen, InputProcessor {
     private Rectangle level3BtnBounds;
     private Vector3 touchPos;
 
-    public ChooseLevel(Main game) {
+    public LoadGameScreen(Main game) {
         this.game = game;
         background = new Texture("home.png");
         level1Btn = new Texture("level1Btn.png");
@@ -110,18 +110,17 @@ public class ChooseLevel implements Screen, InputProcessor {
         game.getCamera().unproject(touchPos);
 
         if(level1BtnBounds.contains(touchPos.x, touchPos.y)){
-            game.setScreen(new Level1_Screen(game,false));
-//            game.setScreen(new Tutorial2(game));
+            game.setScreen(new Level1_Screen(game,true));
             return true;
         }
 
         else if(level2BtnBounds.contains(touchPos.x, touchPos.y)){
-            game.setScreen(new Level2_Screen(game,false));
+            game.setScreen(new Level2_Screen(game,true));
             return true;
         }
 
         else if(level3BtnBounds.contains(touchPos.x, touchPos.y)){
-            game.setScreen(new Level3_Screen(game,false));
+            game.setScreen(new Level3_Screen(game,true));
             return true;
         }
 

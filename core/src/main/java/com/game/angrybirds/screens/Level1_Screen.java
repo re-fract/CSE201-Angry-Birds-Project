@@ -33,6 +33,7 @@ public class Level1_Screen extends InputAdapter implements Screen, Serializable 
     private int currentBirdIndex;
     private Texture slingshot;
     private Texture pauseBtnTexture;
+    private Texture saveBtnTexture;
     private World world;
     private OrthographicCamera camera;
 
@@ -40,6 +41,7 @@ public class Level1_Screen extends InputAdapter implements Screen, Serializable 
     private Vector2 slingShotStartPoint;
     private ShapeRenderer shapeRenderer;
 
+    private boolean loadGame;
     private boolean isIntialized = false;
     private final float TIMESTEP = 1 / 60f;
     private final int VELOCITYITERATIONS = 8, POSITIONITERATIONS = 3;
@@ -48,15 +50,17 @@ public class Level1_Screen extends InputAdapter implements Screen, Serializable 
     private MouseJoint joint;
     private MouseJointDef jointDef;
 
+    private Rectangle saveBtnBounds;
     private Rectangle pauseBtnBounds;
     private Vector3 touchPoint;
 
     private Box2DDebugRenderer debugRenderer;
     private final ArrayList<Body> bodiesToDestroy;
 
-    public Level1_Screen(Main game) {
+    public Level1_Screen(Main game, boolean loadGame) {
         this.game = game;
-        this.bodiesToDestroy =new ArrayList<>();
+        this.bodiesToDestroy = new ArrayList<>();
+        this.loadGame = loadGame;
 
         background = new Texture("level1.png");
         pigs = new ArrayList<>();
@@ -64,11 +68,14 @@ public class Level1_Screen extends InputAdapter implements Screen, Serializable 
         birds = new ArrayList<>();
 
         pauseBtnTexture = new Texture("pause.png");
+        saveBtnTexture = new Texture("save.png");
         slingshot = new Texture("slingshot.png");
 
         slingShotStartPoint = new Vector2();
         shapeRenderer = new ShapeRenderer();
         touchPoint = new Vector3();
+
+        saveBtnBounds = new Rectangle(1160/SCALE, 660/SCALE, 50/SCALE, 50/SCALE);
         pauseBtnBounds = new Rectangle(1220/SCALE, 660/SCALE, 50/SCALE, 50/SCALE);
     }
 
@@ -93,15 +100,8 @@ public class Level1_Screen extends InputAdapter implements Screen, Serializable 
         blocks.add(new WoodBlock(world, 900, 110));
         blocks.add(new WoodBlock(world, 1000, 110));
 
-        File file = new File("GameSaves\\level1_sav.txt");
-
-        if (file.exists()) {
-            System.out.println("The file exists.");
+        if(this.loadGame) {
             loadGame();
-//            file.delete();
-        }
-        else {
-            System.out.println("The file does not exist.");
         }
 
         BodyDef groundBodyDef = new BodyDef();
@@ -257,6 +257,7 @@ public class Level1_Screen extends InputAdapter implements Screen, Serializable 
             }
         }
 
+        game.getBatch().draw(saveBtnTexture, saveBtnBounds.x, saveBtnBounds.y, saveBtnBounds.width, saveBtnBounds.height);
         game.getBatch().draw(pauseBtnTexture, pauseBtnBounds.x, pauseBtnBounds.y, pauseBtnBounds.width, pauseBtnBounds.height);
         game.getBatch().end();
 
@@ -328,8 +329,14 @@ public class Level1_Screen extends InputAdapter implements Screen, Serializable 
         float ballRadius = 2f;
         float scaledBallRadius = ballRadius / 2 * SCALE;
 
-        if(pauseBtnBounds.contains(touchPoint.x, touchPoint.y)){
+        if(saveBtnBounds.contains(touchPoint.x, touchPoint.y)){
             saveGame();
+            return true;
+        }
+
+        if(pauseBtnBounds.contains(touchPoint.x, touchPoint.y)){
+            game.setScreen(new PauseScreen(game,this,"level1.png"));
+            return true;
         }
 
         if (touchPoint.dst(new Vector3(initialBallPosition, 0)) < scaledBallRadius) {

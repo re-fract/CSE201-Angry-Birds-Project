@@ -15,13 +15,15 @@ public class GameOver implements Screen, InputProcessor {
     private Texture pigLaugh;
     private Texture retryBtn;
     private Texture exitBtn;
+    private int level;
     private BitmapFont font;
     private Rectangle retryBtnBounds;
     private Rectangle exitBtnBounds;
     private Vector3 touchPos;
 
-    GameOver(Main game) {
+    GameOver(Main game, int level) {
         this.game = game;
+        this.level = level;
         pigLaugh = new Texture("piglaugh2.png");
         retryBtn = new Texture("retry.png");
         exitBtn = new Texture("exit3.png");
@@ -114,7 +116,15 @@ public class GameOver implements Screen, InputProcessor {
         game.getCamera().unproject(touchPos);
 
         if(retryBtnBounds.contains(touchPos.x, touchPos.y)){
-            game.setScreen(new Level1_Screen(game));
+            if(level == 1) {
+                game.setScreen(new Level1_Screen(game, false));
+            }
+            else if(level == 2) {
+                game.setScreen(new Level2_Screen(game, false));
+            }
+            else if(level == 3) {
+                game.setScreen(new Level3_Screen(game, false));
+            }
             return true;
         }
 

@@ -33,6 +33,7 @@ public class Level2_Screen extends InputAdapter implements Screen {
     private int currentBirdIndex;
     private Texture slingshot;
     private Texture pauseBtnTexture;
+    private Texture saveBtnTexture;
     private World world;
     private OrthographicCamera camera;
 
@@ -40,6 +41,7 @@ public class Level2_Screen extends InputAdapter implements Screen {
     private Vector2 slingShotStartPoint;
     private ShapeRenderer shapeRenderer;
 
+    private boolean loadGame;
     private boolean isIntialized = false;
     private final float TIMESTEP = 1 / 60f;
     private final int VELOCITYITERATIONS = 8, POSITIONITERATIONS = 3;
@@ -49,12 +51,14 @@ public class Level2_Screen extends InputAdapter implements Screen {
     private MouseJointDef jointDef;
 
     private Rectangle pauseBtnBounds;
+    private Rectangle saveBtnBounds;
     private Vector3 touchPoint;
 
     private Box2DDebugRenderer debugRenderer;
 
-    public Level2_Screen(Main game) {
+    public Level2_Screen(Main game, boolean loadGame) {
         this.game = game;
+        this.loadGame = loadGame;
 
         background = new Texture("level2.png");
         pigs = new ArrayList<>();
@@ -62,11 +66,14 @@ public class Level2_Screen extends InputAdapter implements Screen {
         birds = new ArrayList<>();
 
         pauseBtnTexture = new Texture("pause.png");
+        saveBtnTexture = new Texture("save.png");
         slingshot = new Texture("slingshot.png");
 
         slingShotStartPoint = new Vector2();
         shapeRenderer = new ShapeRenderer();
         touchPoint = new Vector3();
+
+        saveBtnBounds = new Rectangle(1160/SCALE, 660/SCALE, 50/SCALE, 50/SCALE);
         pauseBtnBounds = new Rectangle(1220/SCALE, 660/SCALE, 50/SCALE, 50/SCALE);
     }
 
@@ -82,31 +89,24 @@ public class Level2_Screen extends InputAdapter implements Screen {
         camera.update();
         debugRenderer = new Box2DDebugRenderer();
 
-        initialBallPosition = new Vector2(155/SCALE,255/SCALE);
-        birds.add(new RedBird(world, 155, 255));
-        birds.add(new RedBird(world, 130,123));
-        birds.add(new RedBird(world, 225,123));
+        initialBallPosition = new Vector2(155/SCALE,275/SCALE);
+        birds.add(new RedBird(world, 155, 275));
+        birds.add(new RedBird(world, 130,143));
+        birds.add(new RedBird(world, 225,143));
 
-        pigs.add(new NormalPig(world, 950, 235,5,3.2f));
-        pigs.add(new CrownPig(world, 950, 144,3,2.5f));
+        pigs.add(new NormalPig(world, 950, 258,5,3.2f));
+        pigs.add(new CrownPig(world, 950, 168,3,2.5f));
 
-        blocks.add(new WoodBlock(world, 800, 105));
-        blocks.add(new WoodBlock(world, 900, 105));
-        blocks.add(new WoodBlock(world, 1000, 105));
-        blocks.add(new WoodBlock(world, 850, 144));
-        blocks.add(new WoodBlock(world, 1020, 144));
-        blocks.add(new WoodBlock(world, 900, 190));
-        blocks.add(new WoodBlock(world, 1000, 190));
+        blocks.add(new WoodBlock(world, 800, 128));
+        blocks.add(new WoodBlock(world, 900, 128));
+        blocks.add(new WoodBlock(world, 1000, 128));
+        blocks.add(new WoodBlock(world, 850, 168));
+        blocks.add(new WoodBlock(world, 1020, 168));
+        blocks.add(new WoodBlock(world, 900, 213));
+        blocks.add(new WoodBlock(world, 1000, 213));
 
-        File file = new File("GameSaves\\level2_sav.txt");
-
-        if (file.exists()) {
-            System.out.println("The file exists.");
+        if(this.loadGame) {
             loadGame();
-//            file.delete();
-        }
-        else {
-            System.out.println("The file does not exist.");
         }
 
         createWalls();
@@ -116,7 +116,7 @@ public class Level2_Screen extends InputAdapter implements Screen {
         Body groundBody = world.createBody(groundBodyDef);
 
         EdgeShape groundShape = new EdgeShape();
-        groundShape.set(0, 10, 128, 10);
+        groundShape.set(0, 12, 128, 12);
         groundBody.createFixture(groundShape, 0);
         groundShape.dispose();
 
@@ -195,7 +195,7 @@ public class Level2_Screen extends InputAdapter implements Screen {
 
         game.getBatch().begin();
         game.getBatch().draw(background,0,0,1280/SCALE,720/SCALE);
-        game.getBatch().draw(slingshot, 100/SCALE, 100/SCALE, 100/SCALE, 200/SCALE);
+        game.getBatch().draw(slingshot, 100/SCALE, 120/SCALE, 100/SCALE, 200/SCALE);
 
         game.getBatch().setProjectionMatrix(camera.combined);
 
@@ -263,6 +263,7 @@ public class Level2_Screen extends InputAdapter implements Screen {
             }
         }
 
+        game.getBatch().draw(saveBtnTexture, saveBtnBounds.x, saveBtnBounds.y, saveBtnBounds.width, saveBtnBounds.height);
         game.getBatch().draw(pauseBtnTexture, pauseBtnBounds.x, pauseBtnBounds.y, pauseBtnBounds.width, pauseBtnBounds.height);
         game.getBatch().end();
 
@@ -329,6 +330,11 @@ public class Level2_Screen extends InputAdapter implements Screen {
         float ballRadius = 2f;
         float scaledBallRadius = ballRadius / 2 * SCALE;
 
+        if(saveBtnBounds.contains(touchPoint.x, touchPoint.y)){
+            saveGame();
+            return true;
+        }
+
         if(pauseBtnBounds.contains(touchPoint.x, touchPoint.y)){
             game.setScreen(new PauseScreen(game,this,"level2.png"));
             return true;
@@ -373,7 +379,7 @@ public class Level2_Screen extends InputAdapter implements Screen {
 
         if(currentBirdIndex < birds.size()-1) {
             currentBirdIndex++;
-            birds.get(currentBirdIndex).getBody().setTransform(155/SCALE,255/SCALE,0);
+            birds.get(currentBirdIndex).getBody().setTransform(initialBallPosition.x,initialBallPosition.y,0);
         }
 
         return true;

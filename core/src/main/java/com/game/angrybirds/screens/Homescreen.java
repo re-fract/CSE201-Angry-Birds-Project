@@ -15,22 +15,26 @@ public class Homescreen implements Screen, InputProcessor {
     private final Main game;
     private Texture background;
     private Texture playBtn;
+    private Texture loadBtn;
     private Texture exitBtn;
-    private Texture dummyBtn;
+//    private Texture dummyBtn;
     private Rectangle playBtnBounds;
+    private Rectangle loadBtnBounds;
     private Rectangle exitBtnBounds;
     private Vector3 touchPos;
 
     public Homescreen(Main game) {
         this.game = game;
         background = new Texture("home2.jpg");
-        playBtn = new Texture("play.png");
-        exitBtn = new Texture("exit.png");
+        playBtn = new Texture("play2.png");
+        loadBtn = new Texture("load2.png");
+        exitBtn = new Texture("exit4.png");
 
-        dummyBtn = new Texture("dummyBtn.png");
+//        dummyBtn = new Texture("dummyBtn.png");
 
-        playBtnBounds = new Rectangle(520, 250, 250, 125);
-        exitBtnBounds = new Rectangle(520, 150, 250, 125);
+        playBtnBounds = new Rectangle(515, 330, 250, 125);
+        loadBtnBounds = new Rectangle(515, 245, 250, 125);
+        exitBtnBounds = new Rectangle(515, 160, 250, 125);
         touchPos = new Vector3();
 
         Gdx.input.setInputProcessor(this);
@@ -49,10 +53,11 @@ public class Homescreen implements Screen, InputProcessor {
         game.getBatch().begin();
         game.getBatch().draw(background,0,0,1280,720);
         game.getBatch().draw(playBtn,playBtnBounds.x,playBtnBounds.y,playBtnBounds.width,playBtnBounds.height);
+        game.getBatch().draw(loadBtn,loadBtnBounds.x,loadBtnBounds.y,loadBtnBounds.width,loadBtnBounds.height);
         game.getBatch().draw(exitBtn,exitBtnBounds.x,exitBtnBounds.y,exitBtnBounds.width,exitBtnBounds.height);
 
-        game.getBatch().draw(dummyBtn,520,50,70,70);
-        game.getBatch().draw(dummyBtn,650,50,70,70);
+//        game.getBatch().draw(dummyBtn,520,50,70,70);
+//        game.getBatch().draw(dummyBtn,650,50,70,70);
 
         game.getBatch().end();
     }
@@ -105,12 +110,16 @@ public class Homescreen implements Screen, InputProcessor {
         game.getCamera().unproject(touchPos);
 
         //Making dummy btn bounds
-        Rectangle dummyBtnBounds1 = new Rectangle(520,50,70,70);
-        Rectangle dummyBtnBounds2 = new Rectangle(650,50,70,70);
+//        Rectangle dummyBtnBounds1 = new Rectangle(520,50,70,70);
+//        Rectangle dummyBtnBounds2 = new Rectangle(650,50,70,70);
 
         if(playBtnBounds.contains(touchPos.x, touchPos.y)){
             game.setScreen(new ChooseLevel(game));
             return true;
+        }
+
+        if(loadBtnBounds.contains(touchPos.x, touchPos.y)){
+            game.setScreen(new LoadGameScreen(game));
         }
 
         if(exitBtnBounds.contains(touchPos.x, touchPos.y)){
@@ -118,15 +127,15 @@ public class Homescreen implements Screen, InputProcessor {
             return true;
         }
 
-        if(dummyBtnBounds1.contains(touchPos.x, touchPos.y)){
-            game.setScreen(new GameOver(game));
-            return true;
-        }
-
-        if(dummyBtnBounds2.contains(touchPos.x, touchPos.y)){
-            game.setScreen(new LevelCompleted(game));
-            return true;
-        }
+//        if(dummyBtnBounds1.contains(touchPos.x, touchPos.y)){
+//            game.setScreen(new GameOver(game));
+//            return true;
+//        }
+//
+//        if(dummyBtnBounds2.contains(touchPos.x, touchPos.y)){
+//            game.setScreen(new LevelCompleted(game));
+//            return true;
+//        }
 
         return false;
     }
