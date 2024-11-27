@@ -30,7 +30,7 @@ public class Level1_Screen extends InputAdapter implements Screen, Serializable 
     private ArrayList<ParentPig> pigs;
     private ArrayList<ParentBlock> blocks;
     private ArrayList<ParentBird> birds;
-    public int currentBirdIndex;
+    private int currentBirdIndex;
     private Texture slingshot;
     private Texture pauseBtnTexture;
     private World world;
@@ -401,17 +401,14 @@ public class Level1_Screen extends InputAdapter implements Screen, Serializable 
 
     private void saveGame(){
         GameState state = new GameState();
-        state.pigPositions = new ArrayList<>();
         for (ParentPig pig : pigs) {
             state.pigPositions.add(new float[]{pig.getBody().getPosition().x*10, pig.getBody().getPosition().y*10, pig.getHealth(), pig.getRadius(), pig.getFlag()});
         }
 
-        state.blockPositions = new ArrayList<>();
         for (ParentBlock block : blocks) {
             state.blockPositions.add(new float[]{block.getBody().getPosition().x*10, block.getBody().getPosition().y*10, block.getHealth(), block.getFlag()});
         }
 
-        state.birdPositions = new ArrayList<>();
         for (ParentBird bird : birds) {
             state.birdPositions.add(new float[]{bird.getBody().getPosition().x*10, bird.getBody().getPosition().y*10, bird.getFlag()});
         }
@@ -468,7 +465,7 @@ public class Level1_Screen extends InputAdapter implements Screen, Serializable 
             }
             for (float[] blockData : state.blockPositions) {
                 if(blockData[3]==1){
-                    ParentBlock block = new GlassBlock(world, blockData[0], blockData[1] , (int) blockData[2]);
+                    ParentBlock block = new GlassBlock(world, blockData[0], blockData[1], (int) blockData[2]);
                     blocks.add(block);
                 }
                 else if(blockData[3]==2){

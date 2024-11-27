@@ -406,17 +406,15 @@ public class Level2_Screen extends InputAdapter implements Screen {
 
     private void saveGame(){
         GameState state = new GameState();
-        state.pigPositions = new ArrayList<>();
+
         for (ParentPig pig : pigs) {
             state.pigPositions.add(new float[]{pig.getBody().getPosition().x*10, pig.getBody().getPosition().y*10, pig.getHealth(), pig.getRadius(), pig.getFlag()});
         }
 
-        state.blockPositions = new ArrayList<>();
         for (ParentBlock block : blocks) {
             state.blockPositions.add(new float[]{block.getBody().getPosition().x*10, block.getBody().getPosition().y*10, block.getHealth(), block.getFlag()});
         }
 
-        state.birdPositions = new ArrayList<>();
         for (ParentBird bird : birds) {
             state.birdPositions.add(new float[]{bird.getBody().getPosition().x*10, bird.getBody().getPosition().y*10, bird.getFlag()});
         }
