@@ -98,10 +98,10 @@ public class Level3_Screen extends InputAdapter implements Screen {
 
         initialBallPosition = new Vector2(155/SCALE,255/SCALE);
         birds.add(new RedBird(world, 155, 255));
-        birds.add(new RedBird(world, 130,123));
-        birds.add(new RedBird(world, 225,123));
+        birds.add(new YellowBird(world, 130,123));
+        birds.add(new BlackBird(world, 225,123));
         birds.add(new RedBird(world, 265, 123));
-
+        
         blocks.add(new StoneBlock(world, 850, 105));
         blocks.add(new StoneBlock(world, 950, 105));
         blocks.add(new StoneBlock(world, 1050, 105));
