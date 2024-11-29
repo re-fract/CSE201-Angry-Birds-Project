@@ -108,4 +108,13 @@ public class ParentBlock implements Serializable {
     public Sprite getSprite() {
         return sprite;
     }
+    public boolean isHasFallen(){
+        return hasFallen;
+    }
+    public void setfallen(boolean set){
+        hasFallen=set;
+    }
+    public void setYpos(float ypos){
+        initialYPos=ypos;
+    }
 }
