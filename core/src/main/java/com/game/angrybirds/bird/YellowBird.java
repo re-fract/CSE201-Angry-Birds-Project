@@ -7,6 +7,6 @@ import java.io.Serializable;
 
 public class YellowBird extends ParentBird implements Serializable {
     public YellowBird(World world, float x, float y) {
-        super(world,"yellowbird.png",x,y,2);
+        super(world,"yellowbird.png",x,y,2,0.8f);
     }
 }
