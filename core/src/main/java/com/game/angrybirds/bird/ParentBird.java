@@ -15,14 +15,16 @@ public abstract class ParentBird implements Serializable {
     protected Sprite sprite;
     protected Body body;
     protected int flag;
+    protected float density;
 
     private final float SCALE = 10f;
 
-    public ParentBird(World world, String texture, float x, float y, int flag) {
+    public ParentBird(World world, String texture, float x, float y, int flag,float density) {
         this.world = world;
         this.texture = new Texture(texture);
         sprite = new Sprite(this.texture);
         this.flag=flag;
+        this.density=density;
 
         createBody(x,y);
     }
