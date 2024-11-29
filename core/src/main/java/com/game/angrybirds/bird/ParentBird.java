@@ -45,7 +45,7 @@ public abstract class ParentBird implements Serializable {
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
-        fixtureDef.density = 1f;
+        fixtureDef.density = density;
         fixtureDef.friction = 1f;
         fixtureDef.restitution = 0.6f;
         body.setUserData(this);
