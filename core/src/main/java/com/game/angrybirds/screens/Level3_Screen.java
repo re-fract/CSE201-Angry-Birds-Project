@@ -98,8 +98,8 @@ public class Level3_Screen extends InputAdapter implements Screen {
 
         initialBallPosition = new Vector2(155/SCALE,255/SCALE);
         birds.add(new RedBird(world, 155, 255));
-        birds.add(new RedBird(world, 130,123));
-        birds.add(new RedBird(world, 225,123));
+        birds.add(new YellowBird(world, 130,123));
+        birds.add(new YellowBird(world, 225,123));
         birds.add(new RedBird(world, 265, 123));
 
         blocks.add(new StoneBlock(world, 850, 105));
@@ -199,12 +199,15 @@ public class Level3_Screen extends InputAdapter implements Screen {
     }
 
     private int getDamageBasedOnSpeed(float speed) {
-        if (speed/SCALE > 25) {
+        if (speed > 30) {
             return 3;
-        } else if (speed/SCALE > 15) {
+        } else if (speed > 15) {
             return 2;
-        } else {
+        } else if (speed > 5) {
             return 1;
+        }
+        else{
+            return 0;
         }
     }
 

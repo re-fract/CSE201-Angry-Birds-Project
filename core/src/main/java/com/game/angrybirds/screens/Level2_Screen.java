@@ -95,8 +95,8 @@ public class Level2_Screen extends InputAdapter implements Screen {
 
         initialBallPosition = new Vector2(155/SCALE,275/SCALE);
         birds.add(new RedBird(world, 155, 275));
-        birds.add(new RedBird(world, 130,143));
-        birds.add(new RedBird(world, 225,143));
+        birds.add(new BlackBird(world, 130,143));
+        birds.add(new YellowBird(world, 225,143));
 
         pigs.add(new NormalPig(world, 950, 258,5,3.2f));
         pigs.add(new CrownPig(world, 950, 168,3,2.5f));
@@ -104,10 +104,10 @@ public class Level2_Screen extends InputAdapter implements Screen {
         blocks.add(new WoodBlock(world, 800, 128));
         blocks.add(new WoodBlock(world, 900, 128));
         blocks.add(new WoodBlock(world, 1000, 128));
-        blocks.add(new WoodBlock(world, 850, 168));
-        blocks.add(new WoodBlock(world, 1020, 168));
-        blocks.add(new WoodBlock(world, 900, 213));
-        blocks.add(new WoodBlock(world, 1000, 213));
+        blocks.add(new GlassBlock(world, 850, 168));
+        blocks.add(new GlassBlock(world, 1020, 168));
+        blocks.add(new GlassBlock(world, 900, 213));
+        blocks.add(new GlassBlock(world, 1000, 213));
 
         if(this.loadGame) {
             loadGame();
@@ -181,12 +181,15 @@ public class Level2_Screen extends InputAdapter implements Screen {
     }
 
     private int getDamageBasedOnSpeed(float speed) {
-        if (speed/SCALE > 25) {
+        if (speed > 30) {
             return 3;
-        } else if (speed/SCALE > 15) {
+        } else if (speed > 15) {
             return 2;
-        } else {
+        } else if (speed > 5) {
             return 1;
+        }
+        else{
+            return 0;
         }
     }
 

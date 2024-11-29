@@ -20,7 +20,7 @@ public class ParentPig implements Serializable {
     protected boolean markForDestruction = false;
     protected int flag;
 
-    private final float fallThreshold = 1f;
+    private final float fallThreshold = 2f;
     private final float SCALE = 10f;
 
 

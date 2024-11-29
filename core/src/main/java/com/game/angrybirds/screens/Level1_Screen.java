@@ -176,12 +176,15 @@ public class Level1_Screen extends InputAdapter implements Screen, Serializable 
     }
 
     private int getDamageBasedOnSpeed(float speed) {
-        if (speed/SCALE > 25) {
+        if (speed > 30) {
             return 3;
-        } else if (speed/SCALE > 15) {
+        } else if (speed > 15) {
             return 2;
-        } else {
+        } else if (speed > 5) {
             return 1;
+        }
+        else{
+            return 0;
         }
     }
 
