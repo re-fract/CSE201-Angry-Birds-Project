@@ -95,8 +95,8 @@ public class Level2_Screen extends InputAdapter implements Screen {
 
         initialBallPosition = new Vector2(155/SCALE,275/SCALE);
         birds.add(new RedBird(world, 155, 275));
-        birds.add(new RedBird(world, 130,143));
-        birds.add(new RedBird(world, 225,143));
+        birds.add(new BlackBird(world, 130,143));
+        birds.add(new YellowBird(world, 225,143));
 
         pigs.add(new NormalPig(world, 950, 258,5,3.2f));
         pigs.add(new CrownPig(world, 950, 168,3,2.5f));
