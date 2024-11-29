@@ -2,6 +2,7 @@ package com.game.angrybirds.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -516,5 +517,13 @@ public class Level1_Screen extends InputAdapter implements Screen, Serializable 
         catch (IOException | ClassNotFoundException e) {
             System.out.println("Failed to load game state: " + e.getMessage());
         }
+    }
+
+    public ArrayList<ParentPig> getPigs() {
+        return pigs;
+    }
+
+    public ArrayList<ParentBlock> getBlocks() {
+        return blocks;
     }
 }
