@@ -11,7 +11,7 @@
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/Platform-Web%20%7C%20Desktop-lightgrey.svg)]()
 
-[🎯 Play Online](https://sparkly-bombolone-f54a52.netlify.app/) • [📖 Documentation](#documentation) • [🔧 Build](#building-from-source) • [🤝 Contributing](#contributing)
+[🎯 Play Online](https://angrybirdsclone.netlify.app) • [📖 Documentation](#documentation) • [🔧 Build](#building-from-source) • [🤝 Contributing](#contributing)
 
 </div>
 
@@ -50,7 +50,7 @@
 ## 🚀 Quick Start
 
 ### 🎮 Play Online
-Visit our live deployment: **[Play Angry Birds Now!](https://sparkly-bombolone-f54a52.netlify.app)**
+Visit our live deployment: **[Play Angry Birds Now!](https://angrybirdsclone.netlify.app)**
 
 ### 💻 Run Locally
 
@@ -242,6 +242,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 <div align="center">
 
-**[🎮 Play Now](https://sparkly-bombolone-f54a52.netlify.app)** | **[📖 Documentation](#documentation)** | **[🔧 Build Guide](#building-from-source)** | **[🤝 Contribute](#contributing)**
+**[🎮 Play Now](https://angrybirdsclone.netlify.app)** | **[📖 Documentation](#documentation)** | **[🔧 Build Guide](#building-from-source)** | **[🤝 Contribute](#contributing)**
 
 </div>
