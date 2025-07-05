@@ -47,26 +47,6 @@
 
 ---
 
-## 🖼️ Screenshots
-
-<div align="center">
-
-### Main Menu
-![Main Menu](assets/home.png)
-
-### Level Selection
-*Choose from three exciting levels with increasing difficulty*
-
-### Gameplay
-*Physics-based slingshot mechanics with realistic bird trajectories*
-
-### Victory Screen
-*Celebrate your success and advance to the next challenge*
-
-</div>
-
----
-
 ## 🚀 Quick Start
 
 ### 🎮 Play Online
@@ -262,6 +242,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 <div align="center">
 
-**[🎮 Play Now](https://your-netlify-url.netlify.app)** | **[📖 Documentation](#documentation)** | **[🔧 Build Guide](#building-from-source)** | **[🤝 Contribute](#contributing)**
+**[🎮 Play Now](https://sparkly-bombolone-f54a52.netlify.app)** | **[📖 Documentation](#documentation)** | **[🔧 Build Guide](#building-from-source)** | **[🤝 Contribute](#contributing)**
 
 </div>
